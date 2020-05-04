@@ -6,8 +6,7 @@
 * Client
 * Friend
 * Present
-* Date
 * Holiday
 * Meeting
 * Complaint
-* Holiday
+* Group
