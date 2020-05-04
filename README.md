@@ -3,10 +3,10 @@
 
 # Tables in out project
 
-* Client
-* Friend
-* Present
-* Holiday
-* Meeting
-* Complaint
-* Group
+* Client - Danylo
+* Friend - Denis
+* Present - Danylo
+* Holiday - Denis
+* Meeting - Danylo
+* Complaint - Denis
+* Group - Danylo
