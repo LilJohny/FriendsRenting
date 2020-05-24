@@ -1,7 +1,6 @@
-from flask_restful import Resource
 from flask import request
-from sqlalchemy.orm import Query, Session
-from sqlalchemy.orm import sessionmaker
+from flask_restful import Resource
+from sqlalchemy.orm import Session
 from models import engine
 from models.friend import Friend
 
