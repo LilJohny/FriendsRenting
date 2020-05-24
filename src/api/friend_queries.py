@@ -14,21 +14,22 @@ from models.meeting import Meeting
 from models.serializer import AlchemyEncoder
 
 
-class FriendView(Resource):
+class FriendQueries(Resource):
+
     def post(self):
         request_type = request.form['type']
         session = Session(bind=engine)
         if request_type == 'get_all':
-            return FriendView.get_all_friends(session)
+            return FriendQueries.get_all_friends(session)
         elif request_type == 'get_available':
-            return FriendView.get_available_friends(session)
+            return FriendQueries.get_available_friends(session)
         elif request_type == 'get_by_client_id':
             client_id = int(request.form['client_id'])
-            return FriendView.get_by_client_id(session, client_id)
+            return FriendQueries.get_by_client_id(session, client_id)
         elif request_type == 'get_by_name':
             name = request.form['name']
             surname = request.form['surname']
-            return FriendView.get_by_name(session, name, surname)
+            return FriendQueries.get_by_name(session, name, surname)
 
     @staticmethod
     def get_all_friends(session):

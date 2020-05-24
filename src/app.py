@@ -11,9 +11,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:docker@localhost:
 
 # API setup
 from api.hello_world import HelloWorld
-from api.friend_views import FriendView
+from api.friend_queries import FriendQueries
 api.add_resource(HelloWorld, '/rest_hello_world')
-api.add_resource(FriendView, '/friends')
+api.add_resource(FriendQueries, '/friends')
 
 @app.route('/')
 def hello():
