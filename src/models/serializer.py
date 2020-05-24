@@ -15,7 +15,7 @@ class AlchemyEncoder(json.JSONEncoder):
                     json.dumps(data)  # this will fail on non-encodable values, like other classes
                     fields[field] = data
                 except TypeError:
-                    fields[field] = None
+                    fields[field] = str(data)
             # a json-encodable dict
             return fields
 
