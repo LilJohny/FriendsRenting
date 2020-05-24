@@ -1,5 +1,6 @@
 from app import db
 
+
 class Present(db.Model):
     present_id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(30), unique=False, nullable=False)
