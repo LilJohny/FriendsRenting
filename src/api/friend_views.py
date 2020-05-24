@@ -7,7 +7,10 @@ from flask_restful import Resource
 from sqlalchemy.orm import Session
 from models import engine
 from models.friend import Friend
+from models.friend_group import FriendGroup
+from models.friend_group_record import FriendGroupRecord
 from models.holiday import Holiday
+from models.meeting import Meeting
 from models.serializer import AlchemyEncoder
 
 
@@ -19,6 +22,9 @@ class FriendView(Resource):
             return FriendView.get_all_friends(session)
         elif request_type == 'get_available':
             return FriendView.get_available_friends(session)
+        elif request_type == 'get_by_client_id':
+            client_id = int(request.form['client_id'])
+            return FriendView.get_by_client_id(session, client_id)
 
     @staticmethod
     def get_all_friends(session):
@@ -37,4 +43,11 @@ class FriendView(Resource):
         available_friends = before_available_friends + after_available_friends
         available_friends = [friend.Friend for friend in available_friends]
         response = json.dumps(available_friends, cls=AlchemyEncoder)
+        return response
+
+    @staticmethod
+    def get_by_client_id(session, client_id):
+        friends_by_client_id = session.query(Friend).join(FriendGroupRecord).join(FriendGroup).join(Meeting).filter(
+            Meeting.client_id == client_id).all()
+        response = json.dumps(friends_by_client_id, cls=AlchemyEncoder)
         return response
