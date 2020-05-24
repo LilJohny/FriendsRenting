@@ -11,14 +11,11 @@ api.add_resource(HelloWorld, '/rest_hello_world')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:docker@localhost:5432/friends_rent'
 
-engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
-db = SQLAlchemy(app)
 
 
 @app.route('/')
 def hello():
     return "Hello World!"
-
 
 
 if __name__ == '__main__':

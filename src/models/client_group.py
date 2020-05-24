@@ -1,4 +1,4 @@
-from app import db
+from models import db
 
 
 class Client_group(db.Model):
