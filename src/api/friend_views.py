@@ -25,6 +25,10 @@ class FriendView(Resource):
         elif request_type == 'get_by_client_id':
             client_id = int(request.form['client_id'])
             return FriendView.get_by_client_id(session, client_id)
+        elif request_type == 'get_by_name':
+            name = request.form['name']
+            surname = request.form['surname']
+            return FriendView.get_by_name(session, name, surname)
 
     @staticmethod
     def get_all_friends(session):
@@ -50,4 +54,10 @@ class FriendView(Resource):
         friends_by_client_id = session.query(Friend).join(FriendGroupRecord).join(FriendGroup).join(Meeting).filter(
             Meeting.client_id == client_id).all()
         response = json.dumps(friends_by_client_id, cls=AlchemyEncoder)
+        return response
+
+    @staticmethod
+    def get_by_name(session, name, surname):
+        friends_by_name = session.query(Friend).filter(Friend.surname == surname).filter(Friend.name == name).all()
+        response = json.dumps(friends_by_name, cls=AlchemyEncoder)
         return response
