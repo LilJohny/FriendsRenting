@@ -1,10 +1,10 @@
 import json
-from datetime import datetime, date
+from datetime import date
 
-import pytz
 from flask import request
 from flask_restful import Resource
 from sqlalchemy.orm import Session
+
 from models import engine
 from models.friend import Friend
 from models.friend_group import FriendGroup
