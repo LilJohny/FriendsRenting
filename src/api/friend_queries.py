@@ -33,8 +33,8 @@ class FriendQueries(Resource):
 
     @staticmethod
     def get_all_friends(session):
-        all_friends = session.query(Friend).all()
-        response = json.dumps(all_friends, cls=AlchemyEncoder)
+        friends_all = session.query(Friend).all()
+        response = json.dumps(friends_all, cls=AlchemyEncoder)
         return response
 
     @staticmethod
