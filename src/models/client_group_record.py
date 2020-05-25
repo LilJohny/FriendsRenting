@@ -1,7 +1,7 @@
-from app import db
+from models import db
 
 
-class Client_group_record(db.Model):
+class ClientGroupRecord(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     client_id = db.Column(db.Integer, db.ForeignKey('client.client_id', ondelete='CASCADE'), unique=False, nullable=False)
     client_group_id = db.Column(db.Integer, db.ForeignKey('client_group.client_group_id', ondelete='CASCADE'), unique=False, nullable=False)

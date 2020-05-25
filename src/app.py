@@ -1,24 +1,29 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import create_engine
+from flask_restful import Api
+
 
 app = Flask(__name__)
+api = Api(app)
+
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:docker@localhost:5432/friends_rent'
 
-engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
-db = SQLAlchemy(app)
+# API setup
+from api.hello_world import HelloWorld
+from api.friend_queries import FriendQueries
+from api.client_queries import ClientQueries
+from api.meeting_queries import MeetingQueries
+
+api.add_resource(HelloWorld, '/rest_hello_world')
+api.add_resource(FriendQueries, '/friends')
+api.add_resource(ClientQueries, '/clients')
+api.add_resource(MeetingQueries, '/meetings')
 
 
 @app.route('/')
 def hello():
     return "Hello World!"
-
-
-@app.route('/<name>')
-def hello_name(name):
-    return "Hello {}!".format(name)
 
 
 if __name__ == '__main__':
