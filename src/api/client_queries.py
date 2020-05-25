@@ -20,3 +20,4 @@ class ClientQueries(Resource):
     def get_all(session):
         clients_all = session.query(Client).all()
         response = json.dumps(clients_all, cls=AlchemyEncoder)
+        return response
