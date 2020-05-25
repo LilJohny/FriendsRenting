@@ -2,7 +2,6 @@ from flask import Flask
 from flask_restful import Api
 
 
-
 app = Flask(__name__)
 api = Api(app)
 
@@ -20,6 +19,7 @@ api.add_resource(HelloWorld, '/rest_hello_world')
 api.add_resource(FriendQueries, '/friends')
 api.add_resource(ClientQueries, '/clients')
 api.add_resource(MeetingQueries, '/meetings')
+
 
 @app.route('/')
 def hello():
