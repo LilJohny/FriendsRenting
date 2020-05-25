@@ -12,13 +12,14 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:docker@localhost:
 # API setup
 from api.hello_world import HelloWorld
 from api.friend_queries import FriendQueries
-from api.client_queries import ClientQueries
-from api.meeting_queries import MeetingQueries
+# from api.client_queries import ClientQueries
+# from api.meeting_queries import MeetingQueries
+# from api.present_queries import PresentQueries
 
 api.add_resource(HelloWorld, '/rest_hello_world')
 api.add_resource(FriendQueries, '/friends')
-api.add_resource(ClientQueries, '/clients')
-api.add_resource(MeetingQueries, '/meetings')
+# api.add_resource(ClientQueries, '/clients')
+# api.add_resource(MeetingQueries, '/meetings')
 
 
 @app.route('/')
@@ -28,3 +29,5 @@ def hello():
 
 if __name__ == '__main__':
     app.run()
+
+    # кількість днів, коли були вихідними Н друзів
