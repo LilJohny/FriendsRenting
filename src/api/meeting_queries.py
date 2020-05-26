@@ -23,6 +23,10 @@ class MeetingQueries(Resource):
             surname = request.form['surname']
             return MeetingQueries.get_meetings_by_friend_name(session, name, surname)
 
+        elif request_type == 'get_meetings_by_friend_id':
+            friend_id = request.form['friend_id']
+            return MeetingQueries.get_meetings_by_friend_id(session, friend_id)
+
     @staticmethod
     def get_all(session):
         meeting_all = session.query(Meeting).all()
@@ -32,7 +36,7 @@ class MeetingQueries(Resource):
     @staticmethod
     def get_meetings_by_friend_name(session, name, surname):
         meeting_by_friend_name = session.query(Meeting).join(FriendGroup).\
-            join(FriendGroupRecord).join(Friend).filter(Friend.name == name and Friend.surname == surname).all()
+            join(FriendGroupRecord).join(Friend).filter(Friend.name == name).filter(Friend.surname == surname).all()
         response = json.dumps(meeting_by_friend_name, cls=AlchemyEncoder)
         return response
 

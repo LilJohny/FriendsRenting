@@ -13,12 +13,14 @@ from api.friend_queries import FriendQueries
 from api.client_queries import ClientQueries
 from api.meeting_queries import MeetingQueries
 from api.present_queries import PresentQueries
+from api.holiday_queries import HolidayQueries
 
 api.add_resource(HelloWorld, '/rest_hello_world')
 api.add_resource(FriendQueries, '/friends')
 api.add_resource(ClientQueries, '/clients')
 api.add_resource(MeetingQueries, '/meetings')
 api.add_resource(PresentQueries, '/presents')
+api.add_resource(HolidayQueries, '/holiday')
 
 
 @app.route('/')

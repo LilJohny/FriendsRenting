@@ -6,7 +6,6 @@ from flask_restful import Resource
 from sqlalchemy.orm import Session
 
 from models import engine
-from models.friend import Friend
 from models.holiday import Holiday
 from models.serializer import AlchemyEncoder
 
@@ -22,4 +21,4 @@ class HolidayQueries(Resource):
 
     @staticmethod
     def get_number_holidays(session, num_friends):
-        return
+        num_friends = session.query(Holiday).all()
