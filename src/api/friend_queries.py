@@ -62,4 +62,3 @@ class FriendQueries(Resource):
         friends_by_name = session.query(Friend).filter(Friend.surname == surname).filter(Friend.name == name).all()
         response = json.dumps(friends_by_name, cls=AlchemyEncoder)
         return response
-
