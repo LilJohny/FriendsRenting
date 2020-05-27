@@ -53,5 +53,6 @@ class MeetingQueries(Resource):
     def get_meetings_number_by_months(session):
         month = sqlalchemy.func.date_trunc('month', Meeting.date)
         result = session.query(sqlalchemy.func.count(Meeting.meeting_id),month ).group_by(month).all()
+        result = [[month[0], str(month[1])] for month in result]
         response = json.dumps(result, cls=AlchemyEncoder)
         return response
