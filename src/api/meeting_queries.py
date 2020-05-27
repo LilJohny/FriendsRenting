@@ -1,9 +1,11 @@
 import json
 
-import sqlalchemy
+
 from flask import request
 from flask_restful import Resource
 from sqlalchemy.orm import Session
+from sqlalchemy.sql.functions import count
+import sqlalchemy
 
 from models import engine
 from models.meeting import Meeting
