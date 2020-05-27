@@ -12,4 +12,4 @@ class Client(db.Model):
     birth_date = db.Column(db.Date, unique=False, nullable=True)
 
     def __repr__(self):
-        return '<Client %r>' % ''.join([self.name, self.surname])
+        return '<Client %r>' % ' '.join([self.name, self.surname])

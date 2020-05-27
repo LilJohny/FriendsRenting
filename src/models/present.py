@@ -9,4 +9,4 @@ class Present(db.Model):
     returned = db.Column(db.Boolean, default=False, unique=False, nullable=False)
 
     def __repr__(self):
-        return '<User %r>' % ''.join([self.name, self.surname])
+        return '<Present %r>' % self.title

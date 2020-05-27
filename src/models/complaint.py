@@ -8,4 +8,4 @@ class Complaint(db.Model):
     client_group = db.Column(db.Integer, db.ForeignKey('client_group.client_group_id'), unique=False, nullable=False)
 
     def __repr__(self):
-        return '<Complaint %r>' % ''.join([self.name, self.surname])
+        return '<Complaint %r>' % self.complaint_id

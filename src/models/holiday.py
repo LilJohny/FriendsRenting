@@ -8,4 +8,4 @@ class Holiday(db.Model):
     friend_id = db.Column(db.Integer, db.ForeignKey('friend.friend_id', ondelete='CASCADE'), unique=False, nullable=False)
 
     def __repr__(self):
-        return '<Holiday %r>' % ''.join([self.name, self.surname])
+        return '<Holiday of %r>' % self.friend_id

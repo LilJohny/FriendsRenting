@@ -7,4 +7,4 @@ class FriendGroupRecord(db.Model):
     friend_group_id = db.Column(db.Integer, db.ForeignKey('friend_group.friend_group_id', ondelete='CASCADE'), unique=False, nullable=False)
 
     def __repr__(self):
-        return '<Client group %r>' % ''.join([self.name, self.surname])
+        return '<Client group %r>' % self.id
