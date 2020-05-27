@@ -8,4 +8,4 @@ class Meeting(db.Model):
     friend_group_id = db.Column(db.Integer, db.ForeignKey('friend_group.friend_group_id'), unique=False, nullable=False)
 
     def __repr__(self):
-        return '<Client group %r>' % ''.join([self.name, self.surname])
+        return '<Meeting %r>' % self.meeting_id
