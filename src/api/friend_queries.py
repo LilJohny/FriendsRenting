@@ -3,9 +3,14 @@ from datetime import date
 
 from flask import request
 from flask_restful import Resource
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from models import engine
+from models.client import Client
+from models.client_group import ClientGroup
+from models.client_group_record import ClientGroupRecord
+from models.complaint import Complaint
 from models.friend import Friend
 from models.friend_group import FriendGroup
 from models.friend_group_record import FriendGroupRecord
@@ -30,6 +35,9 @@ class FriendQueries(Resource):
             name = request.form['name']
             surname = request.form['surname']
             return FriendQueries.get_by_name(session, name, surname)
+        elif request_type == 'get_average_complained_clients_in_group_by_months':
+            friend_id = request.form['friend_id']
+            return FriendQueries.get_average_complained_clients_in_group_by_months(session, friend_id)
 
     @staticmethod
     def get_all_friends(session):
@@ -61,4 +69,16 @@ class FriendQueries(Resource):
     def get_by_name(session, name, surname):
         friends_by_name = session.query(Friend).filter(Friend.surname == surname).filter(Friend.name == name).all()
         response = json.dumps(friends_by_name, cls=AlchemyEncoder)
+        return response
+
+    @staticmethod
+    def get_average_complained_clients_in_group_by_months(session, friend_id):
+        complained_clients = session.query(Friend, Client).filter(Friend.friend_id == friend_id). \
+            join(Complaint, Complaint.friend == Friend.friend_id). \
+            join(ClientGroup, Complaint.client_group == ClientGroup.client_group_id). \
+            join(ClientGroupRecord, ClientGroup.client_group_id == ClientGroupRecord.client_group_id). \
+            join(Client, Client.client_id == ClientGroupRecord.client_id).all()
+        # TODO FINISH
+        result = complained_clients
+        response = json.dumps(result, cls=AlchemyEncoder)
         return response
