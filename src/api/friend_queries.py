@@ -84,8 +84,6 @@ class FriendQueries(Resource):
             join(Client, Client.client_id == ClientGroupRecord.client_id).\
             filter(Friend.friend_id == friend_id).\
             group_by(month).all()
-        # TODO FINISH
-        records_avg = sqlalchemy.sql.func.avg(records_count)
         result = [[float(month[0]), str(month[1])] for month in result]
         response = json.dumps(result, cls=AlchemyEncoder)
         return response
