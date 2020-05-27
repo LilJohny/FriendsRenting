@@ -1,9 +1,9 @@
 import json
 from datetime import date
 
+import sqlalchemy
 from flask import request
 from flask_restful import Resource
-from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from models import engine
@@ -73,12 +73,19 @@ class FriendQueries(Resource):
 
     @staticmethod
     def get_average_complained_clients_in_group_by_months(session, friend_id):
-        complained_clients = session.query(Friend, Client).filter(Friend.friend_id == friend_id). \
+        month = sqlalchemy.func.date_trunc('month', Complaint.date)
+        records_count = sqlalchemy.sql.func.count(ClientGroupRecord.id)
+        records_avg = sqlalchemy.func.avg(records_count).over()
+        result = session.query(
+                                           records_avg.label('avg'), month).select_from(Friend). \
             join(Complaint, Complaint.friend == Friend.friend_id). \
             join(ClientGroup, Complaint.client_group == ClientGroup.client_group_id). \
             join(ClientGroupRecord, ClientGroup.client_group_id == ClientGroupRecord.client_group_id). \
-            join(Client, Client.client_id == ClientGroupRecord.client_id).all()
+            join(Client, Client.client_id == ClientGroupRecord.client_id).\
+            filter(Friend.friend_id == friend_id).\
+            group_by(month).all()
         # TODO FINISH
-        result = complained_clients
+        records_avg = sqlalchemy.sql.func.avg(records_count)
+        result = [[float(month[0]), str(month[1])] for month in result]
         response = json.dumps(result, cls=AlchemyEncoder)
         return response
