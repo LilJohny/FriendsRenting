@@ -100,13 +100,16 @@ def generate_friend_group_records(session):
     import random
     friends = list(range(1, 5001))
     groups = list(range(1, 2000))
-    for i in range(10001):
-        friend_group_record = FriendGroupRecord()
-        friend_group_record.friend_id = random.choice(friends)
-        friend_group_record.friend_group_id = random.choice(groups)
-        session.add(friend_group_record)
-    session.commit()
+    for i in range(4000):
 
+        friends_selected = random.choices(friends, k=random.choice([2, 3, 4, 5, 6, 7, 8]))
+        friend_group_id = random.choice(groups)
+        for friend in friends_selected:
+            friend_group_record = FriendGroupRecord()
+            friend_group_record.friend_id = friend
+            friend_group_record.friend_group_id = friend_group_id
+            session.add(friend_group_record)
+    session.commit()
 
 def generate_client_groups(session):
     from models.client_group import ClientGroup
@@ -123,11 +126,14 @@ def generate_client_group_records(session):
     clients = list(range(1, 2501))
     groups = list(range(1, 2500))
     for i in range(4000):
-        client_group_record = ClientGroupRecord()
-        client_group_record.client_id = random.choice(clients)
-        client_group_record.client_group_id = random.choice(groups)
-        client_group_record.id = i
-        session.add(client_group_record)
+
+        clients = random.choices(clients, k=random.choice([2, 3, 4, 5, 6, 7, 8]))
+        client_group_id = random.choice(groups)
+        for client in clients:
+            client_group_record = ClientGroupRecord()
+            client_group_record.client_id = client
+            client_group_record.client_group_id = client_group_id
+            session.add(client_group_record)
     session.commit()
 
 
