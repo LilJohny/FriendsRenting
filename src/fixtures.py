@@ -127,9 +127,9 @@ def generate_client_group_records(session):
     groups = list(range(1, 2500))
     for i in range(4000):
 
-        clients = random.choices(clients, k=random.choice([2, 3, 4, 5, 6, 7, 8]))
+        clients_selected = random.choices(clients, k=random.choice([2, 3, 4, 5, 6, 7, 8]))
         client_group_id = random.choice(groups)
-        for client in clients:
+        for client in clients_selected:
             client_group_record = ClientGroupRecord()
             client_group_record.client_id = client
             client_group_record.client_group_id = client_group_id
