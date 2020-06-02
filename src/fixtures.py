@@ -21,8 +21,8 @@ def generate_presents(session):
 
 def parse_profile(profile):
     username = profile['username']
-    name = profile['name'].split(' ')[0]
-    surname = ' '.join(profile['name'].split(' ')[1:])
+    name = profile['name'].replace('Mr.', '').replace('Mrs.', '').strip().split(' ')[0]
+    surname = ' '.join(profile['name'].replace('Mr.', '').replace('Mrs.', '').strip().split(' ')[1:])
     mail = profile['mail']
     address = profile['address']
     sex = profile['sex']
@@ -33,10 +33,12 @@ def parse_profile(profile):
 def generate_profiles(session):
     from faker import Faker
     from models.profile import Profile
+    from password_generator import PasswordGenerator
     faker = Faker()
+    pwo = PasswordGenerator()
     usernames = []
     mails = []
-    for i in range(1, 2501):
+    for i in range(0, 8000):
         profile = faker.simple_profile()
         while profile['username'] in usernames or profile['mail'] in mails:
             print('generating profile')
@@ -50,6 +52,8 @@ def generate_profiles(session):
         profile.address = address
         profile.sex = sex
         profile.birth_date = birth_date
+        profile.password = pwo.generate()
+        profile.profile_id = i + 1
         session.add(profile)
         usernames.append(username)
         mails.append(mail)
