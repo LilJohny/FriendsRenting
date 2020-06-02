@@ -30,16 +30,42 @@ def parse_profile(profile):
     return username, name, surname, mail, address, sex, birth_date
 
 
+def generate_profiles(session):
+    from faker import Faker
+    from models.profile import Profile
+    faker = Faker()
+    usernames = []
+    mails = []
+    for i in range(1, 2501):
+        profile = faker.simple_profile()
+        while profile['username'] in usernames or profile['mail'] in mails:
+            print('generating profile')
+            profile = faker.simple_profile()
+        username, name, surname, mail, address, sex, birth_date = parse_profile(profile)
+        profile = Profile()
+        profile.username = username
+        profile.name = name
+        profile.surname = surname
+        profile.mail = mail
+        profile.address = address
+        profile.sex = sex
+        profile.birth_date = birth_date
+        session.add(profile)
+        usernames.append(username)
+        mails.append(mail)
+    session.commit()
+
+
 def generate_clients(session):
     from faker import Faker
     from models.client import Client
     faker = Faker()
     usernames = []
-    mailes = []
+    mails = []
     for i in range(1, 2501):
 
         profile = faker.simple_profile()
-        while profile['username'] in usernames or profile['mail'] in mailes:
+        while profile['username'] in usernames or profile['mail'] in mails:
             print('generating profile')
             profile = faker.simple_profile()
         username, name, surname, mail, address, sex, birth_date = parse_profile(profile)
@@ -54,7 +80,7 @@ def generate_clients(session):
         client.client_id = i
         session.add(client)
         usernames.append(username)
-        mailes.append(mail)
+        mails.append(mail)
     session.commit()
 
 
@@ -111,6 +137,7 @@ def generate_friend_group_records(session):
             session.add(friend_group_record)
     session.commit()
 
+
 def generate_client_groups(session):
     from models.client_group import ClientGroup
     for i in range(1, 2500):
@@ -141,6 +168,7 @@ def generate_complaints(session):
     import random
     from models.complaint import Complaint
     from faker import Faker
+
     faker = Faker()
     friends = list(range(1, 5001))
     client_groups = list(range(1, 2500))
@@ -160,6 +188,7 @@ def generate_meetings(session):
     import random
     from models.meeting import Meeting
     from faker import Faker
+
     faker = Faker()
     clients = list(range(1, 2501))
     friend_groups = list(range(1, 2000))
@@ -177,6 +206,7 @@ def generate_holidays(session):
     from models.holiday import Holiday
     import datetime
     from faker import Faker
+
     faker = Faker()
     friends = list(range(1, 5001))
     for i in range(1, 4000):
