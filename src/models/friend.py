@@ -1,4 +1,5 @@
 from models import db
+from models.profile import Profile
 
 
 class Friend(db.Model):
