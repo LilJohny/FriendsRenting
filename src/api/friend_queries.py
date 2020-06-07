@@ -54,7 +54,7 @@ class FriendQueries(Resource):
         elif request_type == 'get_all_friends_by_rents_and_date':
             start_date = request.form['start_date']
             end_date = request.form['end_date']
-            rents = request.form['rents']
+            rents = request.form['friends_rented']
             return FriendQueries.get_all_friends_by_rents_and_date(engine, rents, start_date, end_date)
 
         elif request_type == 'get_rented_friends_by_client_time_rents_and_date':
@@ -161,6 +161,24 @@ class FriendQueries(Resource):
                                 where m.date between {start_date} and {end_date}
                                 group by friend.friend_id, name, surname, mail, birth_date, address
                                 having count(friend.friend_id) >= {rents};"""
+            result = connection.execute(text(sql_statement))
+        response = json.dumps(result, cls=AlchemyEncoder)
+        return response
+
+    @staticmethod
+    def get_all_friends_sorted_by_complaint_number(sql_engine, min_clients_number, start_date, end_date):
+        with sql_engine.connect() as connection:
+            sql_statement = f"""select count(*) as complaints, friend_id
+                                from (select count(cgr.id), complaint.friend as friend_id
+                                    from complaint
+                                    left join client_group cg on complaint.client_group = cg.client_group_id
+                                    left join friend on complaint.friend = friend.friend_id
+                                    left join client_group_record cgr on cg.client_group_id = cgr.client_group_id
+                                    group by cg.client_group_id, complaint.date, complaint.friend
+                                    having count(cgr.id) >= {min_clients_number}
+                                    and (complaint.date >= {start_date} and complaint.date <= {end_date})) as cf
+                                    group by friend_id
+                                    order by complaints desc;"""
             result = connection.execute(text(sql_statement))
         response = json.dumps(result, cls=AlchemyEncoder)
         return response
