@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from flask_restful import Api
 
 app = Flask(__name__)
@@ -25,7 +25,7 @@ api.add_resource(HolidayQueries, '/holiday')
 
 @app.route('/')
 def hello():
-    return "Hello World!"
+    return render_template('index.html')
 
 
 if __name__ == '__main__':
