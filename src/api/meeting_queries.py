@@ -1,11 +1,11 @@
 import json
 
-
 from flask import request
 from flask_restful import Resource
 from sqlalchemy.orm import Session
 from sqlalchemy.sql.functions import count
 import sqlalchemy
+from sqlalchemy import text
 
 from models import engine
 from models.meeting import Meeting
@@ -54,7 +54,21 @@ class MeetingQueries(Resource):
     @staticmethod
     def get_meetings_number_by_months(session):
         month = sqlalchemy.func.date_trunc('month', Meeting.date)
-        result = session.query(sqlalchemy.func.count(Meeting.meeting_id),month ).group_by(month).all()
+        result = session.query(sqlalchemy.func.count(Meeting.meeting_id), month).group_by(month).all()
         result = [[month[0], str(month[1])] for month in result]
+        response = json.dumps(result, cls=AlchemyEncoder)
+        return response
+
+    @staticmethod
+    def get_common_meeting_for_friend_and_client_by_date(engine, friend_id, client_id, start_date, end_date):
+        with engine.connect() as connection:
+            sql_statement = f"""select friend.name, c.name, m.meeting_id from client c 
+                                inner join meeting m using(client_id)
+                                inner join friend_group using(friend_group_id) 
+                                inner join friend_group_record using(friend_group_id) 
+                                inner join friend using(friend_id)
+                                where friend.friend_id = {friend_id} and c.client_id = {client_id}
+                                group by friend.friend_id, c.name, m.meeting_id;"""
+            result = connection.execute(text(sql_statement))
         response = json.dumps(result, cls=AlchemyEncoder)
         return response
