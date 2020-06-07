@@ -106,7 +106,7 @@ class FriendQueries(Resource):
     @staticmethod
     def get_clients_who_rented_by_date_rents_and_number(engine, friend_id, start_date, end_date, rents):
         with engine.connect() as connection:
-            sql_statement = f""" select c.name, c.surname from friend f
+            sql_statement = f"""select c.name, c.surname from friend f
                                 inner join friend_group_record using(friend_id) 
                                 inner join friend_group using(friend_group_id) 
                                 inner join meeting m using(friend_group_id)
@@ -114,6 +114,21 @@ class FriendQueries(Resource):
                                 where f.friend_id = {friend_id} and m.date between {start_date} and {end_date}
                                 group by c.client_id
                                 having count(c.client_id) >= {rents};"""
+            result = connection.execute(text(sql_statement))
+        response = json.dumps(result, cls=AlchemyEncoder)
+        return response
+
+    @staticmethod
+    def get_all_friends_by_rents_and_date(engine, start_date, end_date, rents):
+        with engine.connect() as connection:
+            sql_statement = f"""select friend.name, friend.surname from client c 
+                                inner join meeting m using(client_id)
+                                inner join friend_group using(friend_group_id) 
+                                inner join friend_group_record using(friend_group_id) 
+                                inner join friend using(friend_id)
+                                where m.date between {start_date} and {end_date}
+                                group by friend.friend_id
+                                having count(friend.friend_id) >= {rents};"""
             result = connection.execute(text(sql_statement))
         response = json.dumps(result, cls=AlchemyEncoder)
         return response
