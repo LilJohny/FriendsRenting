@@ -1,10 +1,16 @@
+from api.utils import get_random_date
+
+
 def generate_presents(session):
     import random
     from models.present import Present
     from faker import Faker
+    import datetime
     faker = Faker()
     friends_ids = list(range(1, 5000))
     client_ids = list(range(1, 3001))
+    start_date = datetime.datetime(2015, 1, 1)
+    end_date = datetime.datetime.now()
     for i in range(1, 2000):
         _from = random.choice(client_ids)
         to = random.choice(friends_ids)
@@ -15,6 +21,7 @@ def generate_presents(session):
         present.returned = returned
         present._from = _from
         present.title = title
+        present.date = get_random_date(start_date, end_date)
         session.add(present)
     session.commit()
 
