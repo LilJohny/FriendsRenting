@@ -1,10 +1,10 @@
-from app import db
+from models import db
+from models.profile import Profile
 
 
 class Client(db.Model):
     client_id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(30), unique=False, nullable=False)
-    surname = db.Column(db.String(30), unique=False, nullable=False)
+    profile_id = db.Column(db.Integer, db.ForeignKey('profile.profile_id'), unique=True, nullable=False)
 
     def __repr__(self):
-        return '<Client %r>' % ''.join([self.name, self.surname])
+        return '<Client>'
