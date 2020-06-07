@@ -6,6 +6,7 @@ from flask import request
 from flask_restful import Resource
 from sqlalchemy.orm import Session
 from sqlalchemy import func
+from sqlalchemy import text
 
 from models import engine
 from models.client import Client
@@ -46,6 +47,8 @@ class FriendQueries(Resource):
 
     @staticmethod
     def get_all_friends(session):
+        from fixtures import generate_friends, generate_clients
+        generate_clients(session)
         friends_all = session.query(Friend).all()
         response = json.dumps(friends_all, cls=AlchemyEncoder)
         return response
@@ -97,5 +100,20 @@ class FriendQueries(Resource):
         result = func.avg(func.justify_days(Holiday.start_date - Holiday.end_date)).label(
             'average_lead_time')
 
+        response = json.dumps(result, cls=AlchemyEncoder)
+        return response
+
+    @staticmethod
+    def get_clients_who_rented_by_date_and_number(engine, friend_id, start_date, end_date, rents):
+        with engine.connect() as connection:
+            sql_statement = f""" select c.name, c.surname from friend f
+                                inner join friend_group_record using(friend_id) 
+                                inner join friend_group using(friend_group_id) 
+                                inner join meeting m using(friend_group_id)
+                                inner join client c using(client_id)
+                                where f.friend_id = {friend_id} and m.date between {start_date} and {end_date}
+                                group by c.client_id
+                                having count(c.client_id) >= {rents};"""
+            result = connection.execute(text(sql_statement))
         response = json.dumps(result, cls=AlchemyEncoder)
         return response
