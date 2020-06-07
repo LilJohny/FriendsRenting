@@ -14,6 +14,7 @@ from models.friend import Friend
 from models.meeting import Meeting
 from models.friend_group import FriendGroup
 from models.friend_group_record import FriendGroupRecord
+from models.profile import Profile
 from models.serializer import AlchemyEncoder
 
 
@@ -51,35 +52,39 @@ class ClientQueries(Resource):
 
     @staticmethod
     def get_all(session):
-        clients_all = session.query(Client).all()
+        clients_all = session.query(Client, Profile).select_from(Client).join(Profile).all()
         response = json.dumps(clients_all, cls=AlchemyEncoder)
         return response
 
     @staticmethod
     def get_compliant_to_friend(session, name, surname):
-        clients_compliant_to_friend = session.query(Client).join(ClientGroupRecord).join(ClientGroup). \
-            join(Complaint).join(Friend).filter(Friend.name == name).filter(Friend.surname == surname).all()
+        clients_compliant_to_friend = session.query(Client, Profile).select_from(Client).join(Profile).join(
+            ClientGroupRecord).join(ClientGroup).join(Complaint).join(Friend).filter(Friend.name == name).filter(
+            Friend.surname == surname).all()
         response = json.dumps(clients_compliant_to_friend, cls=AlchemyEncoder)
         return response
 
     @staticmethod
     def get_compliant_to_friend_id(session, friend_id):
-        clients_compliant_to_friend = session.query(Client).join(ClientGroupRecord).join(ClientGroup). \
-            join(Complaint).join(Friend).filter(Friend.friend_id == friend_id).all()
+        clients_compliant_to_friend = session.query(Client, Profile).select_from(Client).join(Profile).join(
+            ClientGroupRecord).join(ClientGroup).join(Complaint).join(Friend).filter(
+            Friend.friend_id == friend_id).all()
         response = json.dumps(clients_compliant_to_friend, cls=AlchemyEncoder)
         return response
 
     @staticmethod
     def get_hired_friend_id(session, friend_id):
-        clients_hired_friend = session.query(Client).join(Meeting).join(FriendGroup).join(FriendGroupRecord). \
-            join(Friend).filter(Friend.friend_id == friend_id).all()
+        clients_hired_friend = session.query(Client, Profile).select_from(Client).\
+            join(Profile).join(Meeting).join(FriendGroup).join(FriendGroupRecord).join(Friend).\
+            filter(Friend.friend_id == friend_id).all()
         response = json.dumps(clients_hired_friend, cls=AlchemyEncoder)
         return response
 
     @staticmethod
     def get_hired_friend(session, name, surname):
-        clients_hired_friend = session.query(Client).join(Meeting).join(FriendGroup).join(FriendGroupRecord). \
-            join(Friend).filter(Friend.name == name).filter(Friend.surname == surname).all()
+        clients_hired_friend = session.query(Client, Profile).select_from(Client).join(Profile).\
+            join(Meeting).join(FriendGroup).join(FriendGroupRecord).join(Friend).\
+            filter(Friend.name == name).filter(Friend.surname == surname).all()
         response = json.dumps(clients_hired_friend, cls=AlchemyEncoder)
         return response
 
