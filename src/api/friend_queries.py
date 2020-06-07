@@ -118,14 +118,6 @@ class FriendQueries(Resource):
         return response
 
     @staticmethod
-    def get_days_when_was_number_of_friends_available(session, min_friends_number, max_friends_number):
-        result = func.avg(func.justify_days(Holiday.start_date - Holiday.end_date)).label(
-            'average_lead_time')
-
-        response = json.dumps(result, cls=AlchemyEncoder)
-        return response
-
-    @staticmethod
     def get_all_friends_by_rents_and_date(sql_engine, start_date, end_date, rents):
         with sql_engine.connect() as connection:
             sql_statement = f"""select profile.name, profile.surname from client c
