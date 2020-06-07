@@ -4,9 +4,8 @@ from datetime import date
 import sqlalchemy
 from flask import request
 from flask_restful import Resource
-from sqlalchemy.orm import Session
 from sqlalchemy import func
-from sqlalchemy import text
+from sqlalchemy.orm import Session
 
 from api.utils import get_sql_response, jsonify
 from models import engine
