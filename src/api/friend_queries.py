@@ -63,8 +63,8 @@ class FriendQueries(Resource):
             end_date = request.form['end_date']
             rents = request.form['rent']
 
-            return FriendQueries.get_rented_friends_by_client_time_rents_and_date(engine, client_id, start_date,
-                                                                                  end_date, rents)
+            return FriendQueries.get_rented_friends_by_client_rents_and_date(engine, client_id, start_date,
+                                                                             end_date, rents)
 
     @staticmethod
     def get_all_friends(session):
@@ -142,8 +142,8 @@ class FriendQueries(Resource):
         return response
 
     @staticmethod
-    def get_rented_friends_by_client_time_rents_and_date(sql_engine, client_id, start_date, end_date,
-                                                         rents):
+    def get_rented_friends_by_client_rents_and_date(sql_engine, client_id, start_date, end_date,
+                                                    rents):
         with sql_engine.connect() as connection:
             sql_statement = f"""select profile.name, profile.surname from client c
                                 left join profile using (profile_id)
