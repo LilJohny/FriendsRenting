@@ -63,56 +63,39 @@ def generate_profiles(session):
 def generate_clients(session):
     from faker import Faker
     from models.client import Client
+    import random
     faker = Faker()
-    usernames = []
-    mails = []
-    for i in range(1, 2501):
-
-        profile = faker.simple_profile()
-        while profile['username'] in usernames or profile['mail'] in mails:
-            print('generating profile')
-            profile = faker.simple_profile()
-        username, name, surname, mail, address, sex, birth_date = parse_profile(profile)
+    profile_ids_available = list(range(5001, 8001))
+    profiles_used = []
+    for i in range(1, 3001):
+        profile_id = random.choice(profile_ids_available)
+        while profile_id in profiles_used:
+            profile_id = random.choice(profile_ids_available)
         client = Client()
-        client.username = username
-        client.name = name
-        client.surname = surname
-        client.mail = mail
-        client.address = address
-        client.sex = sex
-        client.birth_date = birth_date
+        client.profile_id = profile_id
         client.client_id = i
         session.add(client)
-        usernames.append(username)
-        mails.append(mail)
+        profiles_used.append(profile_id)
+
     session.commit()
 
 
 def generate_friends(session):
     from faker import Faker
+    import random
     from models.friend import Friend
     faker = Faker()
-    usernames = []
-    mails = []
+    profile_ids_available = list(range(1, 5001))
+    profiles_used = []
     for i in range(1, 5001):
-
-        profile = faker.simple_profile()
-        while profile['username'] in usernames or profile['mail'] in mails:
-            print('generating profile')
-            profile = faker.simple_profile()
-        username, name, surname, mail, address, sex, birth_date = parse_profile(profile)
+        profile_id = random.choice(profile_ids_available)
+        while profile_id in profiles_used:
+            profile_id = random.choice(profile_ids_available)
         friend = Friend()
-        friend.username = username
-        friend.name = name
-        friend.surname = surname
-        friend.mail = mail
-        friend.address = address
-        friend.sex = sex
-        friend.birth_date = birth_date
         friend.friend_id = i
+        friend.profile_id = profile_id
         session.add(friend)
-        usernames.append(username)
-        mails.append(mail)
+        profiles_used.append(profile_id)
     session.commit()
 
 
@@ -144,7 +127,7 @@ def generate_friend_group_records(session):
 
 def generate_client_groups(session):
     from models.client_group import ClientGroup
-    for i in range(1, 2500):
+    for i in range(1, 2501):
         client_group = ClientGroup()
         client_group.client_group_id = i
         session.add(client_group)
@@ -154,8 +137,8 @@ def generate_client_groups(session):
 def generate_client_group_records(session):
     from models.client_group_record import ClientGroupRecord
     import random
-    clients = list(range(1, 2501))
-    groups = list(range(1, 2500))
+    clients = list(range(1, 3001))
+    groups = list(range(1, 2501))
     for i in range(4000):
 
         clients_selected = random.choices(clients, k=random.choice([2, 3, 4, 5, 6, 7, 8]))
