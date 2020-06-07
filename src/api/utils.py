@@ -1,6 +1,6 @@
 import json
 import datetime
-from random import random
+import random
 
 from sqlalchemy import text
 
@@ -26,6 +26,7 @@ def get_sql_response(sql_engine, sql_statement, jsonify_response=False):
 
 
 def get_random_date(start_date, end_date):
+
     time_between_dates = end_date - start_date
     days_between_dates = time_between_dates.days
     random_number_of_days = random.randrange(days_between_dates)
