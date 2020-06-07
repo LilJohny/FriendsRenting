@@ -4,7 +4,7 @@ def generate_presents(session):
     from faker import Faker
     faker = Faker()
     friends_ids = list(range(1, 5000))
-    client_ids = list(range(1, 2500))
+    client_ids = list(range(1, 3001))
     for i in range(1, 2000):
         _from = random.choice(client_ids)
         to = random.choice(friends_ids)
@@ -101,7 +101,7 @@ def generate_friends(session):
 
 def generate_friend_groups(session):
     from models.friend_group import FriendGroup
-    for i in range(2000):
+    for i in range(1, 2001):
         friend_group = FriendGroup()
         friend_group.friend_group_id = i
         session.add(friend_group)
@@ -112,7 +112,7 @@ def generate_friend_group_records(session):
     from models.friend_group_record import FriendGroupRecord
     import random
     friends = list(range(1, 5001))
-    groups = list(range(1, 2000))
+    groups = list(range(1, 2001))
     for i in range(4000):
 
         friends_selected = random.choices(friends, k=random.choice([2, 3, 4, 5, 6, 7, 8]))
@@ -158,8 +158,8 @@ def generate_complaints(session):
 
     faker = Faker()
     friends = list(range(1, 5001))
-    client_groups = list(range(1, 2500))
-    for i in range(1, 2500):
+    client_groups = list(range(1, 2501))
+    for i in range(1, 2501):
         complaint = Complaint()
         complaint.friend = random.choice(friends)
         client_group = random.choice(client_groups)
@@ -177,8 +177,8 @@ def generate_meetings(session):
     from faker import Faker
 
     faker = Faker()
-    clients = list(range(1, 2501))
-    friend_groups = list(range(1, 2000))
+    clients = list(range(1, 3001))
+    friend_groups = list(range(1, 2001))
     for i in range(1, 5000):
         meeting = Meeting()
         meeting.client_id = random.choice(clients)
