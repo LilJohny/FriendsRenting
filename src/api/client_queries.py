@@ -73,3 +73,20 @@ class ClientQueries(Resource):
             join(Friend).filter(Friend.name == name).filter(Friend.surname == surname).all()
         response = json.dumps(clients_hired_friend, cls=AlchemyEncoder)
         return response
+
+    @staticmethod
+    def get_rented_friends_by_client_time_and_date(engine, client_id, start_date, finish_date,
+                                                   rents):
+        with engine.connect() as connection:
+            sql_statement = f"""select friend.name, friend.surname from client c
+                            inner join meeting m using(client_id)
+                            inner join friend_group using(friend_group_id) 
+                            inner join friend_group_record using(friend_group_id) 
+                            inner join friend using(friend_id)
+                            where c.client_id = {client_id} and m.date between {start_date} and {finish_date}
+                            group by friend.friend_id
+                            having count(friend.friend_id) >= {rents};"""
+
+            result = connection.execute(text(sql_statement))
+        response = json.dumps(result, cls=AlchemyEncoder)
+        return response
