@@ -5,6 +5,7 @@ from flask_restful import Resource
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
+from api.utils import get_sql_response
 from models import engine
 from models.client import Client
 from models.client_group_record import ClientGroupRecord
@@ -51,47 +52,49 @@ class ClientQueries(Resource):
                                                                                  end_date, rents)
 
     @staticmethod
-    def get_all(session):
+    def get_all(session, jsonify_response=True):
         clients_all = session.query(Client, Profile).select_from(Client).join(Profile).all()
-        response = json.dumps(clients_all, cls=AlchemyEncoder)
+        response = json.dumps(clients_all, cls=AlchemyEncoder) if jsonify_response else clients_all
         return response
 
     @staticmethod
-    def get_compliant_to_friend(session, name, surname):
+    def get_compliant_to_friend(session, name, surname, jsonify_response=True):
         clients_compliant_to_friend = session.query(Client, Profile).select_from(Client).join(Profile).join(
             ClientGroupRecord).join(ClientGroup).join(Complaint).join(Friend).filter(Friend.name == name).filter(
             Friend.surname == surname).all()
-        response = json.dumps(clients_compliant_to_friend, cls=AlchemyEncoder)
+        response = json.dumps(clients_compliant_to_friend,
+                              cls=AlchemyEncoder) if jsonify_response else clients_compliant_to_friend
         return response
 
     @staticmethod
-    def get_compliant_to_friend_id(session, friend_id):
+    def get_compliant_to_friend_id(session, friend_id, jsonify_response=True):
         clients_compliant_to_friend = session.query(Client, Profile).select_from(Client).join(Profile).join(
             ClientGroupRecord).join(ClientGroup).join(Complaint).join(Friend).filter(
             Friend.friend_id == friend_id).all()
-        response = json.dumps(clients_compliant_to_friend, cls=AlchemyEncoder)
+        response = json.dumps(clients_compliant_to_friend,
+                              cls=AlchemyEncoder) if jsonify_response else clients_compliant_to_friend
         return response
 
     @staticmethod
-    def get_hired_friend_id(session, friend_id):
+    def get_hired_friend_id(session, friend_id, jsonify_response=True):
         clients_hired_friend = session.query(Client, Profile).select_from(Client). \
             join(Profile).join(Meeting).join(FriendGroup).join(FriendGroupRecord).join(Friend). \
             filter(Friend.friend_id == friend_id).all()
-        response = json.dumps(clients_hired_friend, cls=AlchemyEncoder)
+        response = json.dumps(clients_hired_friend, cls=AlchemyEncoder) if jsonify_response else clients_hired_friend
         return response
 
     @staticmethod
-    def get_hired_friend(session, name, surname):
+    def get_hired_friend(session, name, surname, jsonify_response=True):
         clients_hired_friend = session.query(Client, Profile).select_from(Client).join(Profile). \
             join(Meeting).join(FriendGroup).join(FriendGroupRecord).join(Friend). \
             filter(Friend.name == name).filter(Friend.surname == surname).all()
-        response = json.dumps(clients_hired_friend, cls=AlchemyEncoder)
+        response = json.dumps(clients_hired_friend, cls=AlchemyEncoder) if jsonify_response else clients_hired_friend
         return response
 
     @staticmethod
-    def get_clients_who_rented_by_date_rents_and_number(sql_engine, friend_id, start_date, end_date, rents):
-        with sql_engine.connect() as connection:
-            sql_statement = f"""select profile.name, profile.surname from friend f
+    def get_clients_who_rented_by_date_rents_and_number(sql_engine, friend_id, start_date, end_date, rents,
+                                                        jsonify_response=True):
+        sql_statement = f"""select profile.name, profile.surname from friend f
                                 left join profile using (profile_id)
                                 inner join friend_group_record using(friend_id) 
                                 inner join friend_group using(friend_group_id) 
@@ -100,14 +103,14 @@ class ClientQueries(Resource):
                                 where f.friend_id = {friend_id} and m.date between {start_date} and {end_date}
                                 group by c.client_id
                                 having count(c.client_id) >= {rents};"""
-            result = connection.execute(text(sql_statement))
-        response = json.dumps(result, cls=AlchemyEncoder)
+
+        response = get_sql_response(sql_engine, sql_statement, jsonify_response)
         return response
 
     @staticmethod
-    def get_clients_filtered_by_rented_friends_number_and_date(sql_engine, friends_rented, start_date, end_date):
-        with sql_engine.connect() as connection:
-            sql_statement = f"""select client.client_id, name, surname, mail, birth_date, address
+    def get_clients_filtered_by_rented_friends_number_and_date(sql_engine, friends_rented, start_date, end_date,
+                                                               jsonify_response=True):
+        sql_statement = f"""select client.client_id, name, surname, mail, birth_date, address
                                 from client
                                 left join profile p on client.profile_id = p.profile_id
                                 left join meeting m on client.client_id = m.client_id
@@ -116,6 +119,5 @@ class ClientQueries(Resource):
                                 where m.date between {start_date} and {end_date}
                                 group by client.client_id, name, surname, mail, birth_date, address
                                 having count(fgr.id)>={friends_rented};"""
-            result = connection.execute(text(sql_statement))
-        response = json.dumps(result, cls=AlchemyEncoder)
+        response = get_sql_response(sql_engine, sql_statement, jsonify_response)
         return response

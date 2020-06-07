@@ -1,17 +1,16 @@
 import json
 
+import sqlalchemy
 from flask import request
 from flask_restful import Resource
 from sqlalchemy.orm import Session
-from sqlalchemy.sql.functions import count
-import sqlalchemy
-from sqlalchemy import text
 
+from api.utils import get_sql_response
 from models import engine
-from models.meeting import Meeting
 from models.friend import Friend
 from models.friend_group import FriendGroup
 from models.friend_group_record import FriendGroupRecord
+from models.meeting import Meeting
 from models.serializer import AlchemyEncoder
 
 
@@ -67,15 +66,14 @@ class MeetingQueries(Resource):
         return response
 
     @staticmethod
-    def get_common_meeting_for_friend_and_client_by_date(sql_engine, friend_id, client_id, start_date, end_date):
-        with sql_engine.connect() as connection:
-            sql_statement = f"""select friend.name, c.name, m.meeting_id from client c 
+    def get_common_meeting_for_friend_and_client_by_date(sql_engine, friend_id, client_id, start_date, end_date,
+                                                         jsonify_response):
+        sql_statement = f"""select friend.name, c.name, m.meeting_id from client c 
                                 inner join meeting m using(client_id)
                                 inner join friend_group using(friend_group_id) 
                                 inner join friend_group_record using(friend_group_id) 
                                 inner join friend using(friend_id)
                                 where friend.friend_id = {friend_id} and c.client_id = {client_id}
                                 group by friend.friend_id, c.name, m.meeting_id;"""
-            result = connection.execute(text(sql_statement))
-        response = json.dumps(result, cls=AlchemyEncoder)
+        response = get_sql_response(sql_engine, sql_statement, jsonify_response)
         return response

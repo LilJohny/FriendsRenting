@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func
 from sqlalchemy import text
 
+from api.utils import get_sql_response, jsonify
 from models import engine
 from models.client import Client
 from models.client_group import ClientGroup
@@ -67,13 +68,13 @@ class FriendQueries(Resource):
                                                                              end_date, rents)
 
     @staticmethod
-    def get_all_friends(session):
+    def get_all_friends(session, jsonify_response=True):
         friends_all = session.query(Friend, Profile).select_from(Friend).join(Profile).all()
-        response = json.dumps(friends_all, cls=AlchemyEncoder)
+        response = json.dumps(friends_all, cls=AlchemyEncoder) if jsonify_response else friends_all
         return response
 
     @staticmethod
-    def get_available_friends(session):
+    def get_available_friends(session,  jsonify_response=True):
         now = date.today()
         before_available_friends = session.query(Friend, Holiday, Profile).select_from(Friend). \
             join(Profile).join(Holiday).filter(now < Holiday.start_date).all()
@@ -83,26 +84,26 @@ class FriendQueries(Resource):
 
         available_friends = before_available_friends + after_available_friends
         available_friends = [[friend.Friend, friend.Profile] for friend in available_friends]
-        response = json.dumps(available_friends, cls=AlchemyEncoder)
+        response = json.dumps(available_friends, cls=AlchemyEncoder) if jsonify_response else available_friends
         return response
 
     @staticmethod
-    def get_by_client_id(session, client_id):
+    def get_by_client_id(session, client_id, jsonify_response=True):
         friends_by_client_id = session.query(Friend, Profile).select_from(Friend).join(Profile).join(
             FriendGroupRecord).join(FriendGroup).join(Meeting).filter(
             Meeting.client_id == client_id).all()
-        response = json.dumps(friends_by_client_id, cls=AlchemyEncoder)
+        response = json.dumps(friends_by_client_id, cls=AlchemyEncoder) if jsonify_response else friends_by_client_id
         return response
 
     @staticmethod
-    def get_by_name(session, name, surname):
+    def get_by_name(session, name, surname, jsonify_response=True):
         friends_by_name = session.query(Friend, Profile).select_from(Friend).join(Profile).filter(
             Profile.surname == surname).filter(Profile.name == name).all()
-        response = json.dumps(friends_by_name, cls=AlchemyEncoder)
+        response = json.dumps(friends_by_name, cls=AlchemyEncoder) if jsonify_response else friends_by_name
         return response
 
     @staticmethod
-    def get_average_complained_clients_in_group_by_months(session, friend_id):
+    def get_average_complained_clients_in_group_by_months(session, friend_id, jsonify_response=True):
         month = func.date_trunc('month', Complaint.date)
         records_count = sqlalchemy.sql.func.count(ClientGroupRecord.id)
         records_avg = func.avg(records_count).over()
@@ -114,13 +115,12 @@ class FriendQueries(Resource):
             filter(Friend.friend_id == friend_id). \
             group_by(month).all()
         result = [[float(month[0]), str(month[1])] for month in result]
-        response = json.dumps(result, cls=AlchemyEncoder)
+        response = jsonify(result) if jsonify_response else result
         return response
 
     @staticmethod
-    def get_all_friends_by_rents_and_date(sql_engine, start_date, end_date, rents):
-        with sql_engine.connect() as connection:
-            sql_statement = f"""select profile.name, profile.surname from client c
+    def get_all_friends_by_rents_and_date(sql_engine, start_date, end_date, rents, jsonify_response=True):
+        sql_statement = f"""select profile.name, profile.surname from client c
                                 left join profile using (profile_id)
                                 inner join meeting m using(client_id)
                                 inner join friend_group using(friend_group_id) 
@@ -129,15 +129,13 @@ class FriendQueries(Resource):
                                 where m.date between {start_date} and {end_date}
                                 group by friend.friend_id
                                 having count(friend.friend_id) >= {rents};"""
-            result = connection.execute(text(sql_statement))
-        response = json.dumps(result, cls=AlchemyEncoder)
+        response = get_sql_response(sql_engine, sql_statement, jsonify_response)
         return response
 
     @staticmethod
     def get_rented_friends_by_client_rents_and_date(sql_engine, client_id, start_date, end_date,
-                                                    rents):
-        with sql_engine.connect() as connection:
-            sql_statement = f"""select profile.name, profile.surname from client c
+                                                    rents, jsonify_response=True):
+        sql_statement = f"""select profile.name, profile.surname from client c
                                 left join profile using (profile_id)
                                 inner join meeting m using(client_id)
                                 inner join friend_group using(friend_group_id) 
@@ -146,29 +144,25 @@ class FriendQueries(Resource):
                                 where c.client_id = {client_id} and m.date between {start_date} and {end_date}
                                 group by friend.friend_id
                                 having count(friend.friend_id) >= {rents};"""
-
-            result = connection.execute(text(sql_statement))
-        response = json.dumps(result, cls=AlchemyEncoder)
+        response = get_sql_response(sql_engine, sql_statement, jsonify_response)
         return response
 
     @staticmethod
-    def get_friends_filtered_by_rents(sql_engine, rents, start_date, end_date):
-        with sql_engine.connect() as connection:
-            sql_statement = f"""select friend.friend_id, name, surname, mail, birth_date, address from friend
+    def get_friends_filtered_by_rents(sql_engine, rents, start_date, end_date, jsonify_response=True):
+        sql_statement = f"""select friend.friend_id, name, surname, mail, birth_date, address from friend
                                 left join profile p on friend.profile_id = p.profile_id
                                 left join friend_group_record fgr on friend.friend_id = fgr.friend_id
                                 left join meeting m on fgr.friend_group_id = m.friend_group_id
                                 where m.date between {start_date} and {end_date}
                                 group by friend.friend_id, name, surname, mail, birth_date, address
                                 having count(friend.friend_id) >= {rents};"""
-            result = connection.execute(text(sql_statement))
-        response = json.dumps(result, cls=AlchemyEncoder)
+        response = get_sql_response(sql_engine, sql_statement, jsonify_response)
         return response
 
     @staticmethod
-    def get_all_friends_sorted_by_complaint_number(sql_engine, min_clients_number, start_date, end_date):
-        with sql_engine.connect() as connection:
-            sql_statement = f"""select count(*) as complaints, friend_id
+    def get_all_friends_sorted_by_complaint_number(sql_engine, min_clients_number, start_date, end_date,
+                                                   jsonify_response=True):
+        sql_statement = f"""select count(*) as complaints, friend_id
                                 from (select count(cgr.id), complaint.friend as friend_id
                                     from complaint
                                     left join client_group cg on complaint.client_group = cg.client_group_id
@@ -179,6 +173,6 @@ class FriendQueries(Resource):
                                     and (complaint.date >= {start_date} and complaint.date <= {end_date})) as cf
                                     group by friend_id
                                     order by complaints desc;"""
-            result = connection.execute(text(sql_statement))
-        response = json.dumps(result, cls=AlchemyEncoder)
+
+        response = get_sql_response(sql_engine, sql_statement, jsonify_response)
         return response
