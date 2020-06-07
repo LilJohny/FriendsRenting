@@ -30,6 +30,13 @@ class MeetingQueries(Resource):
             return MeetingQueries.get_meetings_by_friend_id(session, friend_id)
         elif request_type == 'get_meetings_number_by_months':
             return MeetingQueries.get_meetings_number_by_months(session)
+        elif request_type == 'get_common_meeting_for_friend_and_client_by_date':
+            friend_id = request.form['friend_id']
+            client_id = request.form['client_id']
+            start_date = request.form['start_date']
+            end_date = request.form['end_date']
+            return MeetingQueries.get_common_meeting_for_friend_and_client_by_date(engine, friend_id, client_id,
+                                                                                   start_date, end_date)
 
     @staticmethod
     def get_all(session):
@@ -60,8 +67,8 @@ class MeetingQueries(Resource):
         return response
 
     @staticmethod
-    def get_common_meeting_for_friend_and_client_by_date(engine, friend_id, client_id, start_date, end_date):
-        with engine.connect() as connection:
+    def get_common_meeting_for_friend_and_client_by_date(sql_engine, friend_id, client_id, start_date, end_date):
+        with sql_engine.connect() as connection:
             sql_statement = f"""select friend.name, c.name, m.meeting_id from client c 
                                 inner join meeting m using(client_id)
                                 inner join friend_group using(friend_group_id) 
