@@ -104,7 +104,7 @@ class FriendQueries(Resource):
         return response
 
     @staticmethod
-    def get_clients_who_rented_by_date_and_number(engine, friend_id, start_date, end_date, rents):
+    def get_clients_who_rented_by_date_rents_and_number(engine, friend_id, start_date, end_date, rents):
         with engine.connect() as connection:
             sql_statement = f""" select c.name, c.surname from friend f
                                 inner join friend_group_record using(friend_id) 

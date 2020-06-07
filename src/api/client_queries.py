@@ -75,7 +75,7 @@ class ClientQueries(Resource):
         return response
 
     @staticmethod
-    def get_rented_friends_by_client_time_and_date(engine, client_id, start_date, finish_date,
+    def get_rented_friends_by_client_time_rents_and_date(engine, client_id, start_date, finish_date,
                                                    rents):
         with engine.connect() as connection:
             sql_statement = f"""select friend.name, friend.surname from client c
