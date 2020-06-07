@@ -73,7 +73,7 @@ class FriendQueries(Resource):
         return response
 
     @staticmethod
-    def get_available_friends(session,  jsonify_response=True):
+    def get_available_friends(session, jsonify_response=True):
         now = date.today()
         before_available_friends = session.query(Friend, Holiday, Profile).select_from(Friend). \
             join(Profile).join(Holiday).filter(now < Holiday.start_date).all()
