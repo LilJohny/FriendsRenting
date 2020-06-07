@@ -9,7 +9,7 @@ class AlchemyEncoder(json.JSONEncoder):
             # an SQLAlchemy class
             fields = {}
             for field in [x for x in dir(obj) if
-                          not x.startswith('_') and x != 'metadata' and x not in {'query', 'query_class'}]:
+                          not x.startswith('_') and x != 'metadata' and x not in {'query', 'query_class', 'password'}]:
                 data = obj.__getattribute__(field)
                 try:
                     json.dumps(data)  # this will fail on non-encodable values, like other classes
