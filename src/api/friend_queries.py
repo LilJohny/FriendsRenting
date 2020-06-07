@@ -150,3 +150,17 @@ class FriendQueries(Resource):
             result = connection.execute(text(sql_statement))
         response = json.dumps(result, cls=AlchemyEncoder)
         return response
+
+    @staticmethod
+    def get_friends_filtered_by_rents(sql_engine, rents, start_date, end_date):
+        with sql_engine.connect() as connection:
+            sql_statement = f"""select friend.friend_id, name, surname, mail, birth_date, address from friend
+                                left join profile p on friend.profile_id = p.profile_id
+                                left join friend_group_record fgr on friend.friend_id = fgr.friend_id
+                                left join meeting m on fgr.friend_group_id = m.friend_group_id
+                                where m.date between {start_date} and {end_date}
+                                group by friend.friend_id, name, surname, mail, birth_date, address
+                                having count(friend.friend_id) >= {rents};"""
+            result = connection.execute(text(sql_statement))
+        response = json.dumps(result, cls=AlchemyEncoder)
+        return response
