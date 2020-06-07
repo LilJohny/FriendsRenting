@@ -46,7 +46,7 @@ class ClientQueries(Resource):
             friend_id = request.form['friend_id']
             start_date = request.form['start_date']
             end_date = request.form['end_date']
-            rents = request.form['rents']
+            rents = request.form['friends_rented']
             return ClientQueries.get_clients_who_rented_by_date_rents_and_number(engine, friend_id, start_date,
                                                                                  end_date, rents)
 
@@ -74,16 +74,16 @@ class ClientQueries(Resource):
 
     @staticmethod
     def get_hired_friend_id(session, friend_id):
-        clients_hired_friend = session.query(Client, Profile).select_from(Client).\
-            join(Profile).join(Meeting).join(FriendGroup).join(FriendGroupRecord).join(Friend).\
+        clients_hired_friend = session.query(Client, Profile).select_from(Client). \
+            join(Profile).join(Meeting).join(FriendGroup).join(FriendGroupRecord).join(Friend). \
             filter(Friend.friend_id == friend_id).all()
         response = json.dumps(clients_hired_friend, cls=AlchemyEncoder)
         return response
 
     @staticmethod
     def get_hired_friend(session, name, surname):
-        clients_hired_friend = session.query(Client, Profile).select_from(Client).join(Profile).\
-            join(Meeting).join(FriendGroup).join(FriendGroupRecord).join(Friend).\
+        clients_hired_friend = session.query(Client, Profile).select_from(Client).join(Profile). \
+            join(Meeting).join(FriendGroup).join(FriendGroupRecord).join(Friend). \
             filter(Friend.name == name).filter(Friend.surname == surname).all()
         response = json.dumps(clients_hired_friend, cls=AlchemyEncoder)
         return response
@@ -100,6 +100,22 @@ class ClientQueries(Resource):
                                 where f.friend_id = {friend_id} and m.date between {start_date} and {end_date}
                                 group by c.client_id
                                 having count(c.client_id) >= {rents};"""
+            result = connection.execute(text(sql_statement))
+        response = json.dumps(result, cls=AlchemyEncoder)
+        return response
+
+    @staticmethod
+    def get_clients_filtered_by_rented_friends_number_and_date(sql_engine, friends_rented, start_date, end_date):
+        with sql_engine.connect() as connection:
+            sql_statement = f"""select client.client_id, name, surname, mail, birth_date, address
+                                from client
+                                left join profile p on client.profile_id = p.profile_id
+                                left join meeting m on client.client_id = m.client_id
+                                left join friend_group fg on m.friend_group_id = fg.friend_group_id
+                                left join friend_group_record fgr on fg.friend_group_id = fgr.friend_group_id
+                                where m.date between {start_date} and {end_date}
+                                group by client.client_id, name, surname, mail, birth_date, address
+                                having count(fgr.id)>={friends_rented};"""
             result = connection.execute(text(sql_statement))
         response = json.dumps(result, cls=AlchemyEncoder)
         return response
