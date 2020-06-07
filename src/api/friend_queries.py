@@ -47,8 +47,6 @@ class FriendQueries(Resource):
 
     @staticmethod
     def get_all_friends(session):
-        from fixtures import generate_friends, generate_clients
-        generate_clients(session)
         friends_all = session.query(Friend).all()
         response = json.dumps(friends_all, cls=AlchemyEncoder)
         return response
