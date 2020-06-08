@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title></title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/bootstrap.min.css') }}">
+
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/profile.css') }}">
+</head>
+
+<body class="text-center">
+<header>
+</header>
+<nav class="navbar navbar-light bg-light">
+    <form class="form-inline">
+        <button class="btn btn-sm bg-secondary btn-outline-secondary" type="button">Your Profile</button>
+        <a class="nav-item nav-link" href="#">Home</a>
+        <a class="nav-item nav-link active" href="#">Actions</a>
+        <a class="nav-item nav-link" href="#">Data Base Quieries</a>
+    </form>
+    <img class="search" src="{{ url_for('static',filename='images/input.png') }}">
+</nav>
+<div class="row mt-5">
+    <div class="card col-6 m-auto">
+        <div class="card-header">Hiring the group of friends for the holiday</div>
+        <div class="mt-2">
+            <div class="row mt-2">
+                <button class="dropdown-item col-6" type="button">Денчик сам переписую цю парашу</button>
+                <input class="col-6" placeholder="цю тоже">
+            </div>
+            <div class="row mt-2">
+                <button class="dropdown-item col-6" type="button">Денчик сам переписую цю парашу</button>
+                <input class="col-6" placeholder="цю тоже">
+            </div>
+            <div class="row mt-2">
+                <button class="dropdown-item col-6" type="button">Денчик сам переписую цю парашу</button>
+                <input class="col-6" placeholder="цю тоже">
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
