@@ -8,6 +8,18 @@ api = Api(app)
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:docker@localhost:5432/friends_rent'
+# Secret key
+import os
+
+SECRET_KEY = os.urandom(32)
+app.config['SECRET_KEY'] = SECRET_KEY
+# Views
+import views.profile
+import views.login
+import views.dashboard
+import views.queries
+import views.actions
+import views.index
 
 # API setup
 from api.hello_world import HelloWorld
@@ -23,13 +35,6 @@ api.add_resource(ClientQueries, '/clients')
 api.add_resource(MeetingQueries, '/meetings')
 api.add_resource(PresentQueries, '/presents')
 api.add_resource(HolidayQueries, '/holiday')
-
-import views.profile
-import views.login
-import views.dashboard
-import views.queries
-import views.actions
-import views.index
 
 if __name__ == '__main__':
     app.run()
