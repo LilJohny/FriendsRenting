@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}
+    <title>Log In</title>
+{% endblock %}
+{% block styles %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/signup.css') }}">
+{% endblock %}
+
+
+{% block content %}
+    <main class="mt-5">
+        <form class="form-signin">
+            <h1 class="h3 mb-3 font-weight-bold">Log in</h1>
+            <p class="mt-5 mb-3 text-muted">Please, provide login information:</p>
+            <input class="form-control" placeholder="Your mail" required="" autofocus="">
+            <input type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
+            <div class="mb-3"></div>
+            <button class="btn btn-lg btn-block" type="submit">Log in</button>
+        </form>
+    </main>
+{% endblock %}
