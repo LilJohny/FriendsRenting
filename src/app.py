@@ -1,7 +1,11 @@
 from flask import Flask, render_template
 from flask_restful import Api
+from flask_login import LoginManager
+
+from models.user import User
 
 app = Flask(__name__)
+login = LoginManager(app)
 api = Api(app)
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -42,6 +46,9 @@ def queries():
 def profile():
     return render_template('profile.html')
 
+@login.user_loader
+def load_user(id):
+    return User.query.get(int(id))
 
 if __name__ == '__main__':
     app.run()
