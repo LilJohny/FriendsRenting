@@ -1,8 +1,6 @@
-from flask import Flask, render_template
-from flask_restful import Api
+from flask import Flask
 from flask_login import LoginManager
-
-from models.user import User
+from flask_restful import Api
 
 app = Flask(__name__)
 login = LoginManager(app)
@@ -26,29 +24,12 @@ api.add_resource(MeetingQueries, '/meetings')
 api.add_resource(PresentQueries, '/presents')
 api.add_resource(HolidayQueries, '/holiday')
 
-
-@app.route('/')
-def hello():
-    return render_template('dashboard.html')
-
-
-@app.route('/actions')
-def actions():
-    return render_template('actions_clients.html')
-
-
-@app.route('/queries')
-def queries():
-    return render_template('queries.html')
-
-
-@app.route('/profile')
-def profile():
-    return render_template('profile.html')
-
-@login.user_loader
-def load_user(id):
-    return User.query.get(int(id))
+import views.profile
+import views.login
+import views.dashboard
+import views.queries
+import views.actions
+import views.index
 
 if __name__ == '__main__':
     app.run()
