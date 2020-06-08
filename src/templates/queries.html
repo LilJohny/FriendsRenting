@@ -17,21 +17,17 @@
                     <a href="{{ url_for('logout') }}">Logout</a>
                 {% endif %}
             </div>
-            <button class="btn btn-sm bg-secondary btn-outline-secondary" type="button"
-                    onclick="location.href='/profile'">
-                Your Profile
-            </button>
-            <a class="nav-item nav-link active" href="{{ url_for('index') }}">Home</a>
+            <a class="nav-item nav-link" href="{{ url_for('index') }}">Home</a>
             <a class="nav-item nav-link" href="{{ url_for('actions') }}">Actions</a>
-            <a class="nav-item nav-link" href="{{ url_for('queries') }}">Data Base Queries</a>
+            <a class="nav-item nav-link active" href="{{ url_for('queries') }}">DataBase Queries</a>
         </form>
         <img class="search" src="{{ url_for('static',filename='images/search.png') }}">
     </nav>
-    <div class="row mt-3">
-        <div class="dropdown col-10 m-auto">
+    <div class="row mt-5">
+        <div class="dropdown col-4 m-auto">
             <button class="btn col-12 dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
-                Data Base Queries
+                DataBase Queries
             </button>
             <div class="mt-2">
                 <button class="dropdown-item" type="button">Денчик сам переписую цю парашу</button>

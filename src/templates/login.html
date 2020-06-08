@@ -10,12 +10,16 @@
 {% block content %}
     <main class="mt-5">
         <form class="form-signin">
+            {{ form.hidden_tag() }}
             <h1 class="h3 mb-3 font-weight-bold">Log in</h1>
             <p class="mt-5 mb-3 text-muted">Please, provide login information:</p>
+            {{ form.mail() }}
             <input class="form-control" placeholder="Your mail" required="" autofocus="">
+            {{ form.password(size=32) }}
             <input type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
             <div class="mb-3"></div>
-            <button class="btn btn-lg btn-block" type="submit">Log in</button>
+            <button class="btn btn-lg btn-block" type="submit">{{ form.submit }}</button>
+
         </form>
     </main>
 {% endblock %}
