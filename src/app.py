@@ -25,7 +25,22 @@ api.add_resource(HolidayQueries, '/holiday')
 
 @app.route('/')
 def hello():
-    return render_template('index.html')
+    return render_template('dashboard.html')
+
+
+@app.route('/actions')
+def actions():
+    return render_template('actions_clients.html')
+
+
+@app.route('/queries')
+def queries():
+    return render_template('queries.html')
+
+
+@app.route('/profile')
+def profile():
+    return render_template('profile.html')
 
 
 if __name__ == '__main__':

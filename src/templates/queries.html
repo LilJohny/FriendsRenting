@@ -21,12 +21,12 @@
 </header>
 <nav class="navbar navbar-light bg-light">
     <form class="form-inline">
-        <button class="btn btn-sm bg-secondary btn-outline-secondary" type="button">Your Profile</button>
-        <a class="nav-item nav-link" href="#">Home</a>
-        <a class="nav-item nav-link" href="#">Actions</a>
-        <a class="nav-item nav-link active" href="#">Data Base Quieries</a>
+        <button class="btn btn-sm bg-secondary btn-outline-secondary" type="button" href="/profile">Your Profile</button>
+        <a class="nav-item nav-link" href="/">Home</a>
+        <a class="nav-item nav-link" href="/actions">Actions</a>
+        <a class="nav-item nav-link active" href="/queries">Data Base Queries</a>
     </form>
-    <img class="search" src="{{ url_for('static',filename='images/input.png') }}">
+    <img class="search" src="{{ url_for('static',filename='images/search.png') }}">
 </nav>
 <div class="row mt-3">
     <div class="dropdown col-10 m-auto">

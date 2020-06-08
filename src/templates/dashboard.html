@@ -21,18 +21,18 @@
 </header>
 <nav class="navbar navbar-light bg-light">
     <form class="form-inline">
-        <button class="btn btn-sm bg-secondary btn-outline-secondary" type="button">Your Profile</button>
-        <a class="nav-item nav-link active" href="#">Home</a>
-        <a class="nav-item nav-link" href="#">Actions</a>
-        <a class="nav-item nav-link" href="#">Data Base Quieries</a>
+        <button class="btn btn-sm bg-secondary btn-outline-secondary" type="button" onclick="location.href='/profile'">Your Profile</button>
+        <a class="nav-item nav-link active" href="/">Home</a>
+        <a class="nav-item nav-link" href="/actions">Actions</a>
+        <a class="nav-item nav-link" href="/queries">Data Base Queries</a>
     </form>
-    <img class="search" src="{{ url_for('static',filename='images/input.png') }}">
+    <img class="search" src="{{ url_for('static',filename='images/search.png') }}">
 </nav>
 <main class="row">
     <div class="col-12 text-center mt-5">
         <p>A simple interface of:</p></div>
     <div class="col-12 text-center">
-        <h2>Data Bases Final Project.<br>A simple web app for friends and</h2></div>
+        <h2>Data Bases Final Project.<br>A simple web app for friends and clients</h2></div>
     <div class="col-12 text-center mt-5">
         <button class="btn btn-sm bg-secondary btn-outline-secondary" type="button">Watch a video</button>
     </div>
