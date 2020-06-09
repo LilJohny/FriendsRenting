@@ -211,7 +211,7 @@ def query_11():
         session = Session(bind=engine)
         start_date = session.query(Holiday.start_date).order_by(Holiday.start_date).all()[0][0]
         end_date = session.query(Holiday.end_date).order_by(Holiday.end_date).all()
-        end_date = end_date[len(end_date)-1][0]
+        end_date = end_date[len(end_date) - 1][0]
         HolidayQueries.get_day_when_friends_had_holidays(engine, min_friends_absent, max_friends_absent, start_date,
                                                          end_date, False)
 
@@ -223,4 +223,13 @@ def query_11():
 @login_required
 def query_12():
     form = Query12Form()
+    if form.validate_on_submit():
+        friend_id = form.friend_id.data
+        if not check_friend_id_valid(friend_id) or not form.validate():
+            flash("Wrong  Friend Id", category="error")
+            return redirect(url_for('query_8'))
+        session = Session(bind=engine)
+        FriendQueries.get_average_complained_clients_in_group_by_months(session, friend_id, False)
+
+        return render_template('success.html')
     return render_template('query_12.html', title='DataBase Query', form=form)
