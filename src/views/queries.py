@@ -178,7 +178,10 @@ def query_9():
     if form.validate_on_submit() and form.validate():
         start_date = form.start_date.data
         end_date = form.end_date.data
-        rents = form.least_clients.data
+        least_clients = form.least_clients.data
+        FriendQueries.get_all_friends_sorted_by_complaint_number(engine, least_clients, start_date, end_date, False)
+
+        return render_template('success.html')
     return render_template('query_9.html', title='DataBase Query', form=form)
 
 
@@ -191,7 +194,7 @@ def query_10():
         friend_id = form.friend_id.data
         if not check_client_id_valid(client_id) or not check_friend_id_valid(friend_id) or not form.validate():
             flash("Wrong Client Id or Friend Id", category="error")
-            return redirect(url_for('query_8'))
+            return redirect(url_for('query_10'))
         start_date = form.start_date.data
         end_date = form.end_date.data
         MeetingQueries.get_common_meeting_for_friend_and_client_by_date(engine, friend_id, client_id, start_date,

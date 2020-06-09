@@ -163,16 +163,17 @@ class FriendQueries(Resource):
     @staticmethod
     def get_all_friends_sorted_by_complaint_number(sql_engine, min_clients_number, start_date, end_date,
                                                    jsonify_response=True):
-        sql_statement = f"""select count(*) as complaints, friend_id
-                                from (select count(cgr.id), complaint.friend as friend_id
+        sql_statement = f"""select count(*) as complaints, friend_id, name, surname
+                                from (select count(cgr.id), complaint.friend as friend_id, p.name, p.surname
                                     from complaint
                                     left join client_group cg on complaint.client_group = cg.client_group_id
                                     left join friend on complaint.friend = friend.friend_id
+                                    left join profile p on friend.profile_id = p.profile_id
                                     left join client_group_record cgr on cg.client_group_id = cgr.client_group_id
-                                    group by cg.client_group_id, complaint.date, complaint.friend
+                                    group by cg.client_group_id, complaint.date, complaint.friend, p.name, p.surname
                                     having count(cgr.id) >= {min_clients_number}
-                                    and (complaint.date >= {start_date} and complaint.date <= {end_date})) as cf
-                                    group by friend_id
+                                    and (complaint.date >= date '{start_date}' and complaint.date <= date '{end_date}')) as cf
+                                    group by friend_id, cf.name, cf.surname
                                     order by complaints desc;"""
 
         response = get_sql_response(sql_engine, sql_statement, jsonify_response)
