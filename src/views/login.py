@@ -22,8 +22,7 @@ def login():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     form = LoginForm()
-    form.validate()
-    if form.validate_on_submit():
+    if form.validate_on_submit() and form.validate():
         session = Session(bind=engine)
         client = session.query(User, Client, Profile).select_from(User).join(Client).join(Profile).filter(
             Profile.mail == form.mail.data). \
