@@ -1,9 +1,11 @@
 from flask import render_template, flash, redirect, url_for
 from flask_login import login_required
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from api.client_queries import ClientQueries
 from api.friend_queries import FriendQueries
+from api.holiday_queries import HolidayQueries
 from api.meeting_queries import MeetingQueries
 from api.present_queries import PresentQueries
 from app import app
@@ -22,6 +24,7 @@ from forms.query_9_form import Query9Form
 from models import engine
 from models.client import Client
 from models.friend import Friend
+from models.holiday import Holiday
 
 
 @app.route('/queries')
@@ -202,6 +205,17 @@ def query_10():
 @login_required
 def query_11():
     form = Query11Form()
+    if form.validate_on_submit() and form.validate():
+        min_friends_absent = form.min_friends_number.data
+        max_friends_absent = form.max_friends_number.data
+        session = Session(bind=engine)
+        start_date = session.query(Holiday.start_date).order_by(Holiday.start_date).all()[0][0]
+        end_date = session.query(Holiday.end_date).order_by(Holiday.end_date).all()
+        end_date = end_date[len(end_date)-1][0]
+        HolidayQueries.get_day_when_friends_had_holidays(engine, min_friends_absent, max_friends_absent, start_date,
+                                                         end_date, False)
+
+        return render_template('success.html')
     return render_template('query_11.html', title='DataBase Query', form=form)
 
 
