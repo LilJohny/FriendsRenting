@@ -38,15 +38,15 @@
             {% endif %}
         {% endwith %}
         <div class="card col-6 m-auto">
-            <div class="card-header">For client C find all friends he has hired at least N times during the specified
-                period (from date F to date T);
+            <div class="card-header">Find all common events for client C and hired friend X for the specified period
+                (from date F to date T);
             </div>
             <form action="{{ url_for('query_1') }}" method="POST">
                 {{ form.hidden_tag() }}
                 <div class="mt-2">
                     <div class="row mt-2">
-                        <p class="col-6">Client Id(Client C):</p>
-                        {{ form.client_id(class_="col-6", placeholder="Client C Id") }}
+                        <p class="col-6">Friend Id(Friend C):</p>
+                        {{ form.client_id(class_="col-6", placeholder="Friend C Id") }}
                     </div>
                     <div class="row mt-2">
                         <p class="col-6">Hires number:</p>
