@@ -38,26 +38,15 @@
             {% endif %}
         {% endwith %}
         <div class="card col-6 m-auto">
-            <div class="card-header">Find all the days when the days off were from A to B of hired friends, inclusive;
+            <div class="card-header">Find the average number of clients in the group by month who registered a complaint
+                against hired friend X;
             </div>
-            <form action="{{ url_for('query_1') }}" method="POST">
+            <form action="{{ url_for('query_12') }}" method="POST">
                 {{ form.hidden_tag() }}
                 <div class="mt-2">
                     <div class="row mt-2">
-                        <p class="col-6">Friend Id(Friend C):</p>
-                        {{ form.client_id(class_="col-6", placeholder="Friend C Id") }}
-                    </div>
-                    <div class="row mt-2">
-                        <p class="col-6">Hires number:</p>
-                        {{ form.rents(class_="col-6", placeholder="Hires number date (N)") }}
-                    </div>
-                    <div class="row mt-2">
-                        <p class="col-6">Start Date:</p>
-                        {{ form.start_date(class_="col-6", placeholder="Start date (F)") }}
-                    </div>
-                    <div class="row mt-2">
-                        <p class="col-6">End Date:</p>
-                        {{ form.end_date(class_="col-6", placeholder="End date (T)") }}
+                        <p class="col-6">Friend Id(Friend X):</p>
+                        {{ form.friend_id(class_="col-6", placeholder="Friend X Id") }}
                     </div>
                 </div>
                 {{ form.submit(class_="btn btn-lg btn-block") }}

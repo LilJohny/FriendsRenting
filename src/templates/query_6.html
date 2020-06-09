@@ -39,26 +39,9 @@
         {% endwith %}
         <div class="card col-6 m-auto">
             <div class="card-header">Find the total number of appointments by month;</div>
-            <form action="{{ url_for('query_1') }}" method="POST">
+            <form action="{{ url_for('query_6') }}" method="POST">
                 {{ form.hidden_tag() }}
-                <div class="mt-2">
-                    <div class="row mt-2">
-                        <p class="col-6">Friend Id(Friend C):</p>
-                        {{ form.client_id(class_="col-6", placeholder="Friend C Id") }}
-                    </div>
-                    <div class="row mt-2">
-                        <p class="col-6">Hires number:</p>
-                        {{ form.rents(class_="col-6", placeholder="Hires number date (N)") }}
-                    </div>
-                    <div class="row mt-2">
-                        <p class="col-6">Start Date:</p>
-                        {{ form.start_date(class_="col-6", placeholder="Start date (F)") }}
-                    </div>
-                    <div class="row mt-2">
-                        <p class="col-6">End Date:</p>
-                        {{ form.end_date(class_="col-6", placeholder="End date (T)") }}
-                    </div>
-                </div>
+
                 {{ form.submit(class_="btn btn-lg btn-block") }}
             </form>
         </div>

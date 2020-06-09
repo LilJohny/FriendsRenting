@@ -41,12 +41,12 @@
             <div class="card-header">For hired friend X, find all holidays for which he was hired at least N times
                 during the specified period (from date F to date T);
             </div>
-            <form action="{{ url_for('query_1') }}" method="POST">
+            <form action="{{ url_for('query_3') }}" method="POST">
                 {{ form.hidden_tag() }}
                 <div class="mt-2">
                     <div class="row mt-2">
                         <p class="col-6">Friend Id(Friend C):</p>
-                        {{ form.client_id(class_="col-6", placeholder="Friend C Id") }}
+                        {{ form.friend_id(class_="col-6", placeholder="Friend X Id") }}
                     </div>
                     <div class="row mt-2">
                         <p class="col-6">Hires number:</p>

@@ -41,16 +41,12 @@
             <div class="card-header">Find all clients who have hired at least N different friends for the specified
                 period (from date F to date T);
             </div>
-            <form action="{{ url_for('query_1') }}" method="POST">
+            <form action="{{ url_for('query_4') }}" method="POST">
                 {{ form.hidden_tag() }}
                 <div class="mt-2">
                     <div class="row mt-2">
-                        <p class="col-6">Friend Id(Friend C):</p>
-                        {{ form.client_id(class_="col-6", placeholder="Friend C Id") }}
-                    </div>
-                    <div class="row mt-2">
                         <p class="col-6">Hires number:</p>
-                        {{ form.rents(class_="col-6", placeholder="Hires number date (N)") }}
+                        {{ form.least_friend(class_="col-6", placeholder="Number of different friends (N)") }}
                     </div>
                     <div class="row mt-2">
                         <p class="col-6">Start Date:</p>
