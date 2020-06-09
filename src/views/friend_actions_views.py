@@ -4,8 +4,10 @@ from sqlalchemy.orm import Session
 
 from app import app
 from forms.holiday_form import HolidayForm
+from forms.return_present_form import ReturnPresentForm
 from models import engine
 from models.holiday import Holiday
+from models.present import Present
 
 
 @app.route('/take_a_holiday', methods=['GET', 'POST'])
@@ -34,3 +36,22 @@ def take_a_holiday():
         session.commit()
         return render_template('success.html')
     return render_template('take_holiday.html', title='Taking a holiday', form=form)
+
+
+@app.route('/returning_a_present', methods=['POST', 'GET'])
+@login_required
+def return_a_present():
+    form = ReturnPresentForm()
+    if form.validate_on_submit() and form.validate():
+        session = Session(bind=engine)
+        user_friend_id = current_user.friend_id
+        user_presents = session.query(Present).with_entities(Present.present_id).filter(
+            Present.to == user_friend_id).all()
+        present_id = form.present_id.data
+        present_id_valid = present_id in user_presents
+        if not present_id_valid:
+            flash("Wrong present id", category="error")
+            return redirect(url_for('return_a_present'))
+        present = session.query(Present).filter(Present.present_id == present_id).update({Present.returned: True})
+        return render_template('success.html')
+    return render_template('return_present.html', title='Returning a present', form=form)
