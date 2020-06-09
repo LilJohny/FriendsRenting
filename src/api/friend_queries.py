@@ -180,7 +180,23 @@ class FriendQueries(Resource):
         return response
 
     @staticmethod
-    def get_how_many_times_rented(sql_engine, least_friends, start_date, end_date,
+    def get_how_many_times_rented(sql_engine, friend_id, least_friends, start_date, end_date,
                                   jsonify_response=True):
-        # TODO IMPLEMENT
-        return []
+        sql_statement = f"""select count(*), friend_id, name, surname from (select hires, friend_id, name, surname
+                            from (select count(fgr.id) as hires,
+                            fgr.friend_id as friend_id,
+                            p.name        as name,
+                            p.surname     as surname,
+                            friend_group_id
+                            from friend
+                            inner join profile p on friend.profile_id = p.profile_id
+                            inner join friend_group_record fgr on friend.friend_id = fgr.friend_id
+                            group by fgr.friend_group_id, fgr.friend_id, p.name, p.surname
+                            having count(fgr.id) >= {least_friends}) as fpff
+                            left join meeting m on fpff.friend_group_id = m.friend_group_id
+                            where m.date between date '{start_date}' and date '{end_date}' and friend_id = {friend_id}
+                            group by friend_id, name, surname, fpff.hires) as fm
+                            group by fm.friend_id, fm.name, fm.surname;"""
+
+        response = get_sql_response(sql_engine, sql_statement, jsonify_response)
+        return response

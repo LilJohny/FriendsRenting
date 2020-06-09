@@ -149,7 +149,7 @@ def query_7():
         start_date = form.start_date.data
         end_date = form.end_date.data
         least_friends = form.least_friends.data
-        FriendQueries.get_how_many_times_rented(engine, least_friends, start_date, end_date)
+        FriendQueries.get_how_many_times_rented(engine, friend_id, least_friends, start_date, end_date)
         return render_template('success.html')
     return render_template('query_7.html', title='DataBase Query', form=form)
 
