@@ -94,13 +94,13 @@ class ClientQueries(Resource):
     def get_clients_who_rented_by_date_rents_and_number(sql_engine, friend_id, start_date, end_date, rents,
                                                         jsonify_response=True):
         sql_statement = f"""select profile.name, profile.surname from friend f
-                                left join profile using (profile_id)
                                 inner join friend_group_record using(friend_id) 
                                 inner join friend_group using(friend_group_id) 
                                 inner join meeting m using(friend_group_id)
                                 inner join client c using(client_id)
-                                where f.friend_id = {friend_id} and m.date between {start_date} and {end_date}
-                                group by c.client_id
+                                left join profile on c.profile_id = profile.profile_id
+                                where f.friend_id = {friend_id} and m.date between date '{start_date}' and date '{end_date}'
+                                group by profile.name, profile.surname,c.client_id
                                 having count(c.client_id) >= {rents};"""
 
         response = get_sql_response(sql_engine, sql_statement, jsonify_response)

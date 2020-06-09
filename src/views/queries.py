@@ -2,6 +2,7 @@ from flask import render_template, flash, redirect, url_for
 from flask_login import login_required
 from sqlalchemy.orm import Session
 
+from api.client_queries import ClientQueries
 from api.friend_queries import FriendQueries
 from app import app
 from forms.query_10_form import Query10Form
@@ -18,6 +19,7 @@ from forms.query_8_form import Query8Form
 from forms.query_9_form import Query9Form
 from models import engine
 from models.client import Client
+from models.friend import Friend
 
 
 @app.route('/queries')
@@ -47,10 +49,33 @@ def query_1():
     return render_template('query_1.html', title='DataBase Query', form=form)
 
 
+def check_client_id_valid(client_id):
+    session = Session(bind=engine)
+    result = len(session.query(Client).filter(Client.client_id == client_id).all()) != 0
+    return result
+
+
+def check_friend_id_valid(friend_id):
+    session = Session(bind=engine)
+    result = len(session.query(Friend).filter(Friend.friend_id == friend_id).all()) != 0
+    return result
+
+
 @app.route('/query_2', methods=['GET', 'POST'])
 @login_required
 def query_2():
     form = Query2Form()
+    if form.validate_on_submit():
+        friend_id = form.friend_id.data
+        if not check_friend_id_valid(friend_id):
+            flash("Wrong Client Id", category="error")
+            return redirect(url_for('query_2'))
+        start_date = form.start_date.data
+        end_date = form.end_date.data
+        rents = form.rents.data
+        ClientQueries.get_clients_who_rented_by_date_rents_and_number(engine, friend_id, start_date,
+                                                                      end_date, rents, False)
+        return render_template('success.html')
     return render_template('query_2.html', title='DataBase Query', form=form)
 
 
