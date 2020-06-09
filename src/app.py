@@ -24,7 +24,7 @@ import views.dashboard
 import views.queries
 import views.actions
 import views.index
-
+import views.friend_actions_views
 # API setup
 from api.hello_world import HelloWorld
 from api.friend_queries import FriendQueries
