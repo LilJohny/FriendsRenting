@@ -32,7 +32,7 @@ def queries():
 @login_required
 def query_1():
     form = Query1Form()
-    if form.validate_on_submit():
+    if form.validate_on_submit() and form.validate():
         client_id = form.client_id.data
         start_date = form.start_date.data
         end_date = form.end_date.data
@@ -67,8 +67,8 @@ def query_2():
     form = Query2Form()
     if form.validate_on_submit():
         friend_id = form.friend_id.data
-        if not check_friend_id_valid(friend_id):
-            flash("Wrong Client Id", category="error")
+        if not check_friend_id_valid(friend_id) or not form.validate():
+            flash("Wrong Friend Id", category="error")
             return redirect(url_for('query_2'))
         start_date = form.start_date.data
         end_date = form.end_date.data
@@ -83,6 +83,12 @@ def query_2():
 @login_required
 def query_3():
     form = Query3Form()
+    if form.validate_on_submit() and form.validate():
+        start_date = form.start_date.data
+        end_date = form.end_date.data
+        rents = form.rents.data
+        FriendQueries.get_friends_filtered_by_rents(engine, rents, start_date, end_date, False)
+        return render_template('success.html')
     return render_template('query_3.html', title='DataBase Query', form=form)
 
 
@@ -90,6 +96,13 @@ def query_3():
 @login_required
 def query_4():
     form = Query4Form()
+    if form.validate_on_submit() and form.validate():
+        start_date = form.start_date.data
+        end_date = form.end_date.data
+        least_friend = form.least_friend.data
+        ClientQueries.get_clients_filtered_by_rented_friends_number_and_date(engine, least_friend, start_date, end_date,
+                                                                             False)
+        return render_template('success.html')
     return render_template('query_4.html', title='DataBase Query', form=form)
 
 
@@ -97,6 +110,11 @@ def query_4():
 @login_required
 def query_5():
     form = Query5Form()
+    if form.validate_on_submit() and form.validate():
+        start_date = form.start_date.data
+        end_date = form.end_date.data
+        times_hired = form.times_hired.data
+        FriendQueries.get_all_friends_by_rents_and_date(engine, start_date, end_date, times_hired, False)
     return render_template('query_5.html', title='DataBase Query', form=form)
 
 
