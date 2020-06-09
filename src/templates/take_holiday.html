@@ -28,6 +28,15 @@
         {% endif %}
     </nav>
     <div class="row mt-5">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class=flashes>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
         <div class="card col-6 m-auto">
             <div class="card-header">Taking a holiday:</div>
             <form action="{{ url_for('take_a_holiday') }}" method="POST">
