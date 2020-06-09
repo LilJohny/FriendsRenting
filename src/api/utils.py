@@ -11,6 +11,7 @@ def execute_sql_statement(sql_engine, sql_statement):
     statement = text(sql_statement)
     with sql_engine.connect() as connection:
         result = connection.execute(statement)
+        result = [row for row in result]
     return result
 
 
@@ -26,7 +27,6 @@ def get_sql_response(sql_engine, sql_statement, jsonify_response=False):
 
 
 def get_random_date(start_date, end_date):
-
     time_between_dates = end_date - start_date
     days_between_dates = time_between_dates.days
     random_number_of_days = random.randrange(days_between_dates)
