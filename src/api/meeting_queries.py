@@ -58,11 +58,11 @@ class MeetingQueries(Resource):
         return response
 
     @staticmethod
-    def get_meetings_number_by_months(session):
+    def get_meetings_number_by_months(session, jsonify_response=True):
         month = sqlalchemy.func.date_trunc('month', Meeting.date)
         result = session.query(sqlalchemy.func.count(Meeting.meeting_id), month).group_by(month).all()
         result = [[month[0], str(month[1])] for month in result]
-        response = json.dumps(result, cls=AlchemyEncoder)
+        response = json.dumps(result, cls=AlchemyEncoder) if jsonify_response else result
         return response
 
     @staticmethod
