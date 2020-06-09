@@ -172,6 +172,10 @@ def query_8():
 @login_required
 def query_9():
     form = Query9Form()
+    if form.validate_on_submit() and form.validate():
+        start_date = form.start_date.data
+        end_date = form.end_date.data
+        rents = form.least_clients.data
     return render_template('query_9.html', title='DataBase Query', form=form)
 
 
@@ -179,6 +183,18 @@ def query_9():
 @login_required
 def query_10():
     form = Query10Form()
+    if form.validate_on_submit():
+        client_id = form.client_id.data
+        friend_id = form.friend_id.data
+        if not check_client_id_valid(client_id) or not check_friend_id_valid(friend_id) or not form.validate():
+            flash("Wrong Client Id or Friend Id", category="error")
+            return redirect(url_for('query_8'))
+        start_date = form.start_date.data
+        end_date = form.end_date.data
+        MeetingQueries.get_common_meeting_for_friend_and_client_by_date(engine, friend_id, client_id, start_date,
+                                                                        end_date, False)
+
+        return render_template('success.html')
     return render_template('query_10.html', title='DataBase Query', form=form)
 
 
