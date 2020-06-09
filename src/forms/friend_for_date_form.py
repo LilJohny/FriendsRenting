@@ -5,8 +5,7 @@ from wtforms.validators import DataRequired
 
 class HireFriendForMeetingForm(FlaskForm):
     friend_id = IntegerField('Friend id', validators=[DataRequired()])
-    meeting_id = IntegerField('Meeting id', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
     def validate_on_submit(self):
-        return True if self.friend_id.data is not None and self.meeting_id.data is not None else False
+        return True if self.friend_id.data is not None  else False

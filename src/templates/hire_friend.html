@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block title %}
-    <title>Dashboard - Hiring the Friends for the Fest</title>
+    <title>Dashboard - Hiring the Friend for the Date</title>
 {% endblock %}
 
 
@@ -38,12 +38,12 @@
             {% endif %}
         {% endwith %}
         <div class="card col-6 m-auto">
-            <div class="card-header">Hiring the Friends for the Fest:</div>
-            <form action="{{ url_for('hire_friends_for_a_fest') }}" method="POST">
+            <div class="card-header">Hiring the Friend for the Date:</div>
+            <form action="{{ url_for('hire_friend_for_a_date') }}" method="POST">
                 <div class="mt-2">
                     <div class="row mt-2">
-                        <p class="col-6">Friends Id:</p>
-                        {{ form.friends_id(class_="col-6", placeholder="Id of friends, separated with spaces") }}
+                        <p class="col-6">Friend Id:</p>
+                        {{ form.friend_id(class_="col-6", placeholder="Id of friend") }}
                     </div>
                 </div>
                 {{ form.submit(class_="btn btn-lg btn-block") }}
