@@ -39,13 +39,13 @@
         {% endwith %}
         <div class="card col-6 m-auto">
             <div class="card-header">Find the average number of clients in the group by month who registered a complaint
-                against hired friend X;
+                against hired friend X:
             </div>
             <form action="{{ url_for('query_12') }}" method="POST">
                 {{ form.hidden_tag() }}
                 <div class="mt-2">
                     <div class="row mt-2">
-                        <p class="col-6">Friend Id(Friend X):</p>
+                        <p class="col-6">Friend Id (Friend X):</p>
                         {{ form.friend_id(class_="col-6", placeholder="Friend X Id") }}
                     </div>
                 </div>

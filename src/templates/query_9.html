@@ -39,7 +39,7 @@
         {% endwith %}
         <div class="card col-6 m-auto">
             <div class="card-header">Display the number of complaints from groups of at least N clients for the
-                specified period (from date F to date T) in descending order of hired friends;
+                specified period (from date F to date T) in descending order of hired friends:
             </div>
             <form action="{{ url_for('query_9') }}" method="POST">
                 {{ form.hidden_tag() }}

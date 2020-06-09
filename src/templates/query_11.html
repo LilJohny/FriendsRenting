@@ -38,7 +38,7 @@
             {% endif %}
         {% endwith %}
         <div class="card col-6 m-auto">
-            <div class="card-header">Find all the days when the days off were from A to B of hired friends, inclusive;
+            <div class="card-header">Find all the days when the days off were from A to B of hired friends, inclusive:
             </div>
             <form action="{{ url_for('query_11') }}" method="POST">
                 {{ form.hidden_tag() }}

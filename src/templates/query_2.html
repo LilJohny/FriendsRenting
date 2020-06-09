@@ -39,7 +39,7 @@
         {% endwith %}
         <div class="card col-6 m-auto">
             <div class="card-header">For hired friend X, find all clients who have hired him at least N times for the
-                specified period (from date F to date T);
+                specified period (from date F to date T):
             </div>
             <form action="{{ url_for('query_2') }}" method="POST">
                 {{ form.hidden_tag() }}

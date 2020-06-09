@@ -39,7 +39,7 @@
         {% endwith %}
         <div class="card col-6 m-auto">
             <div class="card-header">Find all common events for client C and hired friend X for the specified period
-                (from date F to date T);
+                (from date F to date T):
             </div>
             <form action="{{ url_for('query_10') }}" method="POST">
                 {{ form.hidden_tag() }}
@@ -51,10 +51,6 @@
                     <div class="row mt-2">
                         <p class="col-6">Friend Id(Friend X):</p>
                         {{ form.friend_id(class_="col-6", placeholder="Friend X Id") }}
-                    </div>
-                    <div class="row mt-2">
-                        <p class="col-6">Hires number:</p>
-                        {{ form.rents(class_="col-6", placeholder="Hires number date (N)") }}
                     </div>
                     <div class="row mt-2">
                         <p class="col-6">Start Date:</p>

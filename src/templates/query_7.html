@@ -38,8 +38,8 @@
             {% endif %}
         {% endwith %}
         <div class="card col-6 m-auto">
-            <div class="card-header">>For hired friend X and each holiday he attended, find how many times during the
-                specified period (from date F to date T) he was hired for the holiday in a group of at least N friends;
+            <div class="card-header">For hired friend X and each holiday he attended, find how many times during the
+                specified period (from date F to date T) he was hired for the holiday in a group of at least N friends:
             </div>
             <form action="{{ url_for('query_7') }}" method="POST">
                 {{ form.hidden_tag() }}

@@ -39,7 +39,7 @@
         {% endwith %}
         <div class="card col-6 m-auto">
             <div class="card-header">Find all hired friends who have been hired at least N times
-                during the specified period (from date F to date T);
+                during the specified period (from date F to date T):
             </div>
             <form action="{{ url_for('query_5') }}" method="POST">
                 {{ form.hidden_tag() }}
