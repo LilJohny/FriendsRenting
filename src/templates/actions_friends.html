@@ -12,16 +12,18 @@
         <form class="form-inline">
             <div>
                 {% if current_user.is_anonymous %}
-                    <a href="{{ url_for('login') }}">Login</a>
+                    <a href="{{ url_for('login') }}">Log In</a>
                 {% else %}
-                    <a href="{{ url_for('logout') }}">Logout</a>
+                    <a href="{{ url_for('logout') }}">Log Out</a>
                 {% endif %}
             </div>
-            <a class="nav-item nav-link" href="{{ url_for('index') }}">Home</a>
+            <a class="nav-item nav-link " href="{{ url_for('index') }}">Home</a>
             <a class="nav-item nav-link active" href="{{ url_for('actions') }}">Actions</a>
             <a class="nav-item nav-link" href="{{ url_for('queries') }}">DataBase Queries</a>
         </form>
-        <img class="search" src="{{ url_for('static',filename='images/search.png') }}">
+        {% if not current_user.is_anonymous %}
+            <a class="nav-item nav-link" href="{{ url_for('profile') }}">Profile</a>
+        {% endif %}
     </nav>
     <div class="row mt-5">
         <div class="dropdown col-4 m-auto">
