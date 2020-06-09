@@ -1,42 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+{% extends "base.html" %}
+{% block title %}
+    <title>Dashboard</title>
+{% endblock %}
 
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
 
-    <title></title>
-
-    <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/bootstrap.min.css') }}">
-
-    <!-- Custom styles for this template -->
+{% block styles %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/dashboard.css') }}">
-</head>
+{% endblock %}
 
-<body class="text-center">
-<header>
-</header>
-<nav class="navbar navbar-light bg-light">
-    <form class="form-inline">
-        <button class="btn btn-sm bg-secondary btn-outline-secondary" type="button">Your Profile</button>
-        <a class="nav-item nav-link active" href="#">Home</a>
-        <a class="nav-item nav-link" href="#">Actions</a>
-        <a class="nav-item nav-link" href="#">Data Base Quieries</a>
-    </form>
-    <img class="search" src="{{ url_for('static',filename='images/input.png') }}">
-</nav>
-<main class="row">
-    <div class="col-12 text-center mt-5">
-        <p>A simple interface of:</p></div>
-    <div class="col-12 text-center">
-        <h2>Data Bases Final Project.<br>A simple web app for friends and</h2></div>
-    <div class="col-12 text-center mt-5">
-        <button class="btn btn-sm bg-secondary btn-outline-secondary" type="button">Watch a video</button>
-    </div>
-</main>
 
-</body>
-</html>
+{% block content %}
+    <nav class="navbar navbar-light bg-light">
+        <form class="form-inline">
+            <div>
+                {% if current_user.is_anonymous %}
+                    <a href="{{ url_for('login') }}">Log In</a>
+                {% else %}
+                    <a href="{{ url_for('logout') }}">Log Out</a>
+                {% endif %}
+            </div>
+            <a class="nav-item nav-link active" href="{{ url_for('index') }}">Home</a>
+            <a class="nav-item nav-link" href="{{ url_for('actions') }}">Actions</a>
+            <a class="nav-item nav-link" href="{{ url_for('queries') }}">DataBase Queries</a>
+        </form>
+        {% if not current_user.is_anonymous %}
+            <a class="nav-item nav-link" href="{{ url_for('profile') }}">Profile</a>
+        {% endif %}
+    </nav>
+    <main class="row">
+        <div class="col-12 text-center mt-5">
+            <p>A simple interface of:</p></div>
+        <div class="col-12 text-center">
+            <h2>Data Bases Final Project.<br>A simple web app for friends and clients</h2></div>
+        <div class="col-12 text-center mt-5">
+            <button class="btn btn-sm bg-secondary btn-outline-secondary" type="button">Watch a video</button>
+        </div>
+    </main>
+{% endblock %}

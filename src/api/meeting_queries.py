@@ -58,22 +58,23 @@ class MeetingQueries(Resource):
         return response
 
     @staticmethod
-    def get_meetings_number_by_months(session):
+    def get_meetings_number_by_months(session, jsonify_response=True):
         month = sqlalchemy.func.date_trunc('month', Meeting.date)
         result = session.query(sqlalchemy.func.count(Meeting.meeting_id), month).group_by(month).all()
         result = [[month[0], str(month[1])] for month in result]
-        response = json.dumps(result, cls=AlchemyEncoder)
+        response = json.dumps(result, cls=AlchemyEncoder) if jsonify_response else result
         return response
 
     @staticmethod
     def get_common_meeting_for_friend_and_client_by_date(sql_engine, friend_id, client_id, start_date, end_date,
                                                          jsonify_response):
-        sql_statement = f"""select friend.name, c.name, m.meeting_id from client c 
+        sql_statement = f"""select p.name, p.surname, m.meeting_id from client c 
                                 inner join meeting m using(client_id)
                                 inner join friend_group using(friend_group_id) 
                                 inner join friend_group_record using(friend_group_id) 
                                 inner join friend using(friend_id)
-                                where friend.friend_id = {friend_id} and c.client_id = {client_id}
-                                group by friend.friend_id, c.name, m.meeting_id;"""
+                                left join profile p on friend.profile_id = p.profile_id
+                                where friend.friend_id = {friend_id} and c.client_id = {client_id} and m.date between date '{start_date}' and date  '{end_date}'
+                                group by friend.friend_id,p.name, p.surname, m.meeting_id;"""
         response = get_sql_response(sql_engine, sql_statement, jsonify_response)
         return response

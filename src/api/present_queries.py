@@ -48,7 +48,7 @@ class PresentQueries(Resource):
                             inner join holiday h on friend.friend_id = h.friend_id
                             inner join present p on friend.friend_id = p."to"
                             left join client c on p._from = c.client_id
-                            where p._from = {client_id} and p.date >=  {start_date} and p.date <= {end_date}
+                            where p._from = {client_id} and p.date >=  date '{start_date}' and p.date <= date  '{end_date}'
                             group by p.present_id, p.title, p._from, p."to"
                             order by avg(end_date - start_date) desc ;"""
 

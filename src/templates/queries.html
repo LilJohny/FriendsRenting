@@ -1,54 +1,85 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+{% extends "base.html" %}
+{% block title %}
+    <title>Dashboard - Queries</title>
+{% endblock %}
 
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title></title>
-
-    <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/bootstrap.min.css') }}">
-
-    <!-- Custom styles for this template -->
+{% block styles %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/queries.css') }}">
-</head>
+{% endblock %}
 
-<body class="text-center">
-<header>
-</header>
-<nav class="navbar navbar-light bg-light">
-    <form class="form-inline">
-        <button class="btn btn-sm bg-secondary btn-outline-secondary" type="button">Your Profile</button>
-        <a class="nav-item nav-link" href="#">Home</a>
-        <a class="nav-item nav-link" href="#">Actions</a>
-        <a class="nav-item nav-link active" href="#">Data Base Quieries</a>
-    </form>
-    <img class="search" src="{{ url_for('static',filename='images/input.png') }}">
-</nav>
-<div class="row mt-3">
-    <div class="dropdown col-10 m-auto">
-        <button class="btn col-12 dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
-            Data Base Quieries
-        </button>
-        <div class="mt-2">
-            <button class="dropdown-item" type="button">Денчик сам переписую цю парашу</button>
-            <button class="dropdown-item" type="button">Денчик сам переписую цю парашу</button>
-            <button class="dropdown-item" type="button">Денчик сам переписую цю парашу</button>
-            <button class="dropdown-item" type="button">Денчик сам переписую цю парашу</button>
-            <button class="dropdown-item" type="button">Денчик сам переписую цю парашу</button>
-            <button class="dropdown-item" type="button">Денчик сам переписую цю парашу</button>
-            <button class="dropdown-item" type="button">Денчик сам переписую цю парашу</button>
-            <button class="dropdown-item" type="button">Денчик сам переписую цю парашу</button>
-            <button class="dropdown-item" type="button">Денчик сам переписую цю парашу</button>
-            <button class="dropdown-item" type="button">Денчик сам переписую цю парашу</button>
-            <button class="dropdown-item" type="button">Денчик сам переписую цю парашу</button>
-            <button class="dropdown-item" type="button">Денчик сам переписую цю парашу</button>
+{% block content %}
+    <nav class="navbar navbar-light bg-light">
+        <form class="form-inline">
+            <div>
+                {% if current_user.is_anonymous %}
+                    <a href="{{ url_for('login') }}">Log In</a>
+                {% else %}
+                    <a href="{{ url_for('logout') }}">Log Out</a>
+                {% endif %}
+            </div>
+            <a class="nav-item nav-link" href="{{ url_for('index') }}">Home</a>
+            <a class="nav-item nav-link" href="{{ url_for('actions') }}">Actions</a>
+            <a class="nav-item nav-link active" href="{{ url_for('queries') }}">DataBase Queries</a>
+        </form>
+        {% if not current_user.is_anonymous %}
+            <a class="nav-item nav-link" href="{{ url_for('profile') }}">Profile</a>
+        {% endif %}
+    </nav>
+    <div class="row mt-5">
+        <div class="dropdown col-10 m-auto">
+            <button class="btn col-12 dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                DataBase Queries
+            </button>
+            <div class="mt-8">
+                <button class="dropdown-item" type="button" onclick="location.href='/query_1'">For client C find all
+                    friends he has hired at least N times
+                    during the specified period (from date F to date T);
+                </button>
+                <button class="dropdown-item" type="button" onclick="location.href='/query_2'">For hired friend X, find
+                    all clients who have hired him at
+                    least N times for the specified period (from date F to date T);
+                </button>
+                <button class="dropdown-item" type="button" onclick="location.href='/query_3'">Find a friends who were
+                    hired at least N times during the specified period (from date F to date T) for different fests
+                </button>
+                <button class="dropdown-item" type="button" onclick="location.href='/query_4'">Find all clients who have
+                    hired at least N different friends
+                    for the specified period (from date F to date T);
+                </button>
+                <button class="dropdown-item" type="button" onclick="location.href='/query_5'">Find all hired friends
+                    who have been hired at least N times
+                    during the specified period (from date F to date T);
+                </button>
+                <button class="dropdown-item" type="button" onclick="location.href='/query_6'">Find the total number of
+                    appointments by month;
+                </button>
+                <button class="dropdown-item" type="button" onclick="location.href='/query_7'">For hired friend X and
+                    each holiday he attended, find how
+                    many times during the specified period (from date F to date T) he was hired for the holiday in a
+                    group of at least N friends;
+                </button>
+                <button class="dropdown-item" type="button" onclick="location.href='/query_8'">Display gifts in
+                    descending order of the average number of
+                    days off taken by hired friends who received a gift from client C during the specified period (from
+                    date F to date T);
+                </button>
+                <button class="dropdown-item" type="button" onclick="location.href='/query_9'">Display the number of
+                    complaints from groups of at least N
+                    clients for the specified period (from date F to date T) in descending order of hired friends;
+                </button>
+                <button class="dropdown-item" type="button" onclick="location.href='/query_10'">Find all common events
+                    for client C and hired friend X for
+                    the specified period (from date F to date T);
+                </button>
+                <button class="dropdown-item" type="button" onclick="location.href='/query_11'">Find all the days when
+                    the days off were from A to B of
+                    hired friends, inclusive;
+                </button>
+                <button class="dropdown-item" type="button" onclick="location.href='/query_12'">Find the average number
+                    of clients in the group by month who registered a complaint against hired friend X;
+                </button>
+            </div>
         </div>
     </div>
-</div>
-</body>
-</html>
+{% endblock %}

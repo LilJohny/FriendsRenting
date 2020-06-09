@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}
+    <title>Dashboard - DataBase Query</title>
+{% endblock %}
+
+
+{% block styles %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/form.css') }}">
+{% endblock %}
+
+
+{% block content %}
+    <nav class="navbar navbar-light bg-light">
+        <form class="form-inline">
+            <div>
+                {% if current_user.is_anonymous %}
+                    <a href="{{ url_for('login') }}">Log In</a>
+                {% else %}
+                    <a href="{{ url_for('logout') }}">Log Out</a>
+                {% endif %}
+            </div>
+            <a class="nav-item nav-link" href="{{ url_for('index') }}">Home</a>
+            <a class="nav-item nav-link" href="{{ url_for('actions') }}">Actions</a>
+            <a class="nav-item nav-link active" href="{{ url_for('queries') }}">DataBase Queries</a>
+        </form>
+        {% if not current_user.is_anonymous %}
+            <a class="nav-item nav-link" href="{{ url_for('profile') }}">Profile</a>
+        {% endif %}
+    </nav>
+    <div class="row mt-5">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class=flashes>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+        <div class="card col-6 m-auto">
+            <div class="card-header">Find all clients who have hired at least N different friends for the specified
+                period (from date F to date T):
+            </div>
+            <form action="{{ url_for('query_4') }}" method="POST">
+                {{ form.hidden_tag() }}
+                <div class="mt-2">
+                    <div class="row mt-2">
+                        <p class="col-6">Hires number:</p>
+                        {{ form.least_friend(class_="col-6", placeholder="Number of different friends (N)") }}
+                    </div>
+                    <div class="row mt-2">
+                        <p class="col-6">Start Date:</p>
+                        {{ form.start_date(class_="col-6", placeholder="Start date (F)") }}
+                    </div>
+                    <div class="row mt-2">
+                        <p class="col-6">End Date:</p>
+                        {{ form.end_date(class_="col-6", placeholder="End date (T)") }}
+                    </div>
+                </div>
+                {{ form.submit(class_="btn btn-lg btn-block") }}
+            </form>
+        </div>
+    </div>
+{% endblock %}

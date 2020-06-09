@@ -1,12 +1,31 @@
-from flask import Flask, render_template
+from flask import Flask
+from flask_login import LoginManager
 from flask_restful import Api
 
 app = Flask(__name__)
+
+login = LoginManager(app)
+login.login_view = 'login'
+
 api = Api(app)
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:docker@localhost:5432/friends_rent'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://team12:passwor2d1@142.93.163.88:6006/db12'
 
+# Secret key
+import os
+
+SECRET_KEY = os.urandom(32)
+app.config['SECRET_KEY'] = SECRET_KEY
+# Views
+import views.profile
+import views.login
+import views.dashboard
+import views.queries
+import views.actions
+import views.index
+import views.friend_actions_views
+import views.client_action_views
 # API setup
 from api.hello_world import HelloWorld
 from api.friend_queries import FriendQueries
@@ -21,12 +40,6 @@ api.add_resource(ClientQueries, '/clients')
 api.add_resource(MeetingQueries, '/meetings')
 api.add_resource(PresentQueries, '/presents')
 api.add_resource(HolidayQueries, '/holiday')
-
-
-@app.route('/')
-def hello():
-    return render_template('index.html')
-
 
 if __name__ == '__main__':
     app.run()

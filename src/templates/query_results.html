@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}
+    <title>Dashboard - DataBase Query</title>
+{% endblock %}
+
+
+{% block styles %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/form.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/results.css') }}">
+{% endblock %}
+
+
+{% block content %}
+    <nav class="navbar navbar-light bg-light">
+        <form class="form-inline">
+            <div>
+                {% if current_user.is_anonymous %}
+                    <a href="{{ url_for('login') }}">Log In</a>
+                {% else %}
+                    <a href="{{ url_for('logout') }}">Log Out</a>
+                {% endif %}
+            </div>
+            <a class="nav-item nav-link" href="{{ url_for('index') }}">Home</a>
+            <a class="nav-item nav-link " href="{{ url_for('actions') }}">Actions</a>
+            <a class="nav-item nav-link active" href="{{ url_for('queries') }}">DataBase Queries</a>
+        </form>
+        {% if not current_user.is_anonymous %}
+            <a class="nav-item nav-link" href="{{ url_for('profile') }}">Profile</a>
+        {% endif %}
+    </nav>
+    <div class="row mt-5">
+        <div class="card col-6 m-auto">
+            <div>
+                <h2 class="query-heading">Query Results</h2>
+                <table class="query-result">
+
+                    {% for entry in data %}
+                        <tr>
+                            {% for column in entry %}
+                                <td class="query-result-cell">
+                                    {{ column }}
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

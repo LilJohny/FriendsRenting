@@ -120,13 +120,13 @@ class FriendQueries(Resource):
     @staticmethod
     def get_all_friends_by_rents_and_date(sql_engine, start_date, end_date, rents, jsonify_response=True):
         sql_statement = f"""select profile.name, profile.surname from client c
-                                left join profile using (profile_id)
                                 inner join meeting m using(client_id)
                                 inner join friend_group using(friend_group_id) 
                                 inner join friend_group_record using(friend_group_id) 
                                 inner join friend using(friend_id)
-                                where m.date between {start_date} and {end_date}
-                                group by friend.friend_id
+                                left join profile on friend.profile_id = profile.profile_id 
+                                where m.date between date '{start_date}' and date  '{end_date}'
+                                group by profile.name, profile.surname
                                 having count(friend.friend_id) >= {rents};"""
         response = get_sql_response(sql_engine, sql_statement, jsonify_response)
         return response
@@ -134,26 +134,28 @@ class FriendQueries(Resource):
     @staticmethod
     def get_rented_friends_by_client_rents_and_date(sql_engine, client_id, start_date, end_date,
                                                     rents, jsonify_response=True):
-        sql_statement = f"""select profile.name, profile.surname from client c
-                                left join profile using (profile_id)
-                                inner join meeting m using(client_id)
-                                inner join friend_group using(friend_group_id) 
-                                inner join friend_group_record using(friend_group_id) 
-                                inner join friend using(friend_id)
-                                where c.client_id = {client_id} and m.date between {start_date} and {end_date}
-                                group by friend.friend_id
-                                having count(friend.friend_id) >= {rents};"""
+        sql_statement = f"""select profile.name, profile.surname, friend.friend_id, client_id 
+                            from client c
+                            inner join meeting m using (client_id)
+                            inner join friend_group using (friend_group_id)
+                            inner join friend_group_record using (friend_group_id)
+                            inner join friend  using (friend_id)
+                            left join profile on friend.profile_id = profile.profile_id
+                            where c.client_id = {client_id}
+                            and m.date between date '{start_date}' and date '{end_date}'
+                            group by  client_id,profile.name, profile.surname, friend.friend_id
+                            having count(friend.friend_id) >= {rents};"""
         response = get_sql_response(sql_engine, sql_statement, jsonify_response)
         return response
 
     @staticmethod
     def get_friends_filtered_by_rents(sql_engine, rents, start_date, end_date, jsonify_response=True):
-        sql_statement = f"""select friend.friend_id, name, surname, mail, birth_date, address from friend
+        sql_statement = f"""select friend.friend_id, p.name, p.surname, p.mail, p.birth_date, p.address from friend
                                 left join profile p on friend.profile_id = p.profile_id
                                 left join friend_group_record fgr on friend.friend_id = fgr.friend_id
                                 left join meeting m on fgr.friend_group_id = m.friend_group_id
-                                where m.date between {start_date} and {end_date}
-                                group by friend.friend_id, name, surname, mail, birth_date, address
+                                where m.date between date '{start_date}' and date '{end_date}'
+                                group by friend.friend_id, p.name, p.surname, p.mail, p.birth_date, p.address
                                 having count(friend.friend_id) >= {rents};"""
         response = get_sql_response(sql_engine, sql_statement, jsonify_response)
         return response
@@ -161,17 +163,40 @@ class FriendQueries(Resource):
     @staticmethod
     def get_all_friends_sorted_by_complaint_number(sql_engine, min_clients_number, start_date, end_date,
                                                    jsonify_response=True):
-        sql_statement = f"""select count(*) as complaints, friend_id
-                                from (select count(cgr.id), complaint.friend as friend_id
+        sql_statement = f"""select count(*) as complaints, friend_id, name, surname
+                                from (select count(cgr.id), complaint.friend as friend_id, p.name, p.surname
                                     from complaint
                                     left join client_group cg on complaint.client_group = cg.client_group_id
                                     left join friend on complaint.friend = friend.friend_id
+                                    left join profile p on friend.profile_id = p.profile_id
                                     left join client_group_record cgr on cg.client_group_id = cgr.client_group_id
-                                    group by cg.client_group_id, complaint.date, complaint.friend
+                                    group by cg.client_group_id, complaint.date, complaint.friend, p.name, p.surname
                                     having count(cgr.id) >= {min_clients_number}
-                                    and (complaint.date >= {start_date} and complaint.date <= {end_date})) as cf
-                                    group by friend_id
+                                    and (complaint.date >= date '{start_date}' and complaint.date <= date '{end_date}')) as cf
+                                    group by friend_id, cf.name, cf.surname
                                     order by complaints desc;"""
+
+        response = get_sql_response(sql_engine, sql_statement, jsonify_response)
+        return response
+
+    @staticmethod
+    def get_how_many_times_rented(sql_engine, friend_id, least_friends, start_date, end_date,
+                                  jsonify_response=True):
+        sql_statement = f"""select count(*), friend_id, name, surname from (select hires, friend_id, name, surname
+                            from (select count(fgr.id) as hires,
+                            fgr.friend_id as friend_id,
+                            p.name        as name,
+                            p.surname     as surname,
+                            friend_group_id
+                            from friend
+                            inner join profile p on friend.profile_id = p.profile_id
+                            inner join friend_group_record fgr on friend.friend_id = fgr.friend_id
+                            group by fgr.friend_group_id, fgr.friend_id, p.name, p.surname
+                            having count(fgr.id) >= {least_friends}) as fpff
+                            left join meeting m on fpff.friend_group_id = m.friend_group_id
+                            where m.date between date '{start_date}' and date '{end_date}' and friend_id = {friend_id}
+                            group by friend_id, name, surname, fpff.hires) as fm
+                            group by fm.friend_id, fm.name, fm.surname;"""
 
         response = get_sql_response(sql_engine, sql_statement, jsonify_response)
         return response

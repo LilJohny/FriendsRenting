@@ -7,7 +7,7 @@ class Config(object):
     TESTING = False
     CSRF_ENABLED = True
     SECRET_KEY = 'this-really-needs-to-be-changed'
-    SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:docker@localhost:5432/friends_rent'
+    SQLALCHEMY_DATABASE_URI = 'postgresql://team12:passwor2d1@142.93.163.88:6006/db12'
 
 
 class ProductionConfig(Config):

@@ -1,44 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+{% extends "base.html" %}
+{% block title %}
+    <title>Dashboard - Friend Actions</title>
+{% endblock %}
 
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title></title>
-
-    <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/bootstrap.min.css') }}">
-
-    <!-- Custom styles for this template -->
+{% block styles %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/actions_friends.css') }}">
-</head>
+{% endblock %}
 
-<body class="text-center">
-<header>
-</header>
-<nav class="navbar navbar-light bg-light">
-    <form class="form-inline">
-        <button class="btn btn-sm bg-secondary btn-outline-secondary" type="button">Your Profile</button>
-        <a class="nav-item nav-link" href="#">Home</a>
-        <a class="nav-item nav-link active" href="#">Actions</a>
-        <a class="nav-item nav-link" href="#">Data Base Quieries</a>
-    </form>
-    <img class="search" src="{{ url_for('static',filename='images/input.png') }}">
-</nav>
-<div class="row mt-5">
-    <div class="dropdown col-4 m-auto">
-        <button class="btn col-12 dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
-            Actions for hired friends
-        </button>
-        <div class="mt-2">
-            <button class="dropdown-item" type="button">Денчик сам переписую цю парашу</button>
-            <button class="dropdown-item" type="button">Денчик сам переписую цю парашу</button>
+{% block content %}
+    <nav class="navbar navbar-light bg-light">
+        <form class="form-inline">
+            <div>
+                {% if current_user.is_anonymous %}
+                    <a href="{{ url_for('login') }}">Log In</a>
+                {% else %}
+                    <a href="{{ url_for('logout') }}">Log Out</a>
+                {% endif %}
+            </div>
+            <a class="nav-item nav-link " href="{{ url_for('index') }}">Home</a>
+            <a class="nav-item nav-link active" href="{{ url_for('actions') }}">Actions</a>
+            <a class="nav-item nav-link" href="{{ url_for('queries') }}">DataBase Queries</a>
+        </form>
+        {% if not current_user.is_anonymous %}
+            <a class="nav-item nav-link" href="{{ url_for('profile') }}">Profile</a>
+        {% endif %}
+    </nav>
+    <div class="row mt-5">
+        <div class="dropdown col-4 m-auto">
+            <button class="btn col-12 dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                Actions for friends
+            </button>
+            <div class="mt-2">
+                <button class="dropdown-item" type="button" onclick="location.href='/take_a_holiday'">Take
+                    a holiday
+                </button>
+                <button class="dropdown-item" type="button" onclick="location.href='/returning_a_present'">Return a present</button>
+            </div>
         </div>
     </div>
-</div>
-</body>
-</html>
+{% endblock %}

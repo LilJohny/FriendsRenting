@@ -94,13 +94,13 @@ class ClientQueries(Resource):
     def get_clients_who_rented_by_date_rents_and_number(sql_engine, friend_id, start_date, end_date, rents,
                                                         jsonify_response=True):
         sql_statement = f"""select profile.name, profile.surname from friend f
-                                left join profile using (profile_id)
                                 inner join friend_group_record using(friend_id) 
                                 inner join friend_group using(friend_group_id) 
                                 inner join meeting m using(friend_group_id)
                                 inner join client c using(client_id)
-                                where f.friend_id = {friend_id} and m.date between {start_date} and {end_date}
-                                group by c.client_id
+                                left join profile on c.profile_id = profile.profile_id
+                                where f.friend_id = {friend_id} and m.date between date '{start_date}' and date '{end_date}'
+                                group by profile.name, profile.surname,c.client_id
                                 having count(c.client_id) >= {rents};"""
 
         response = get_sql_response(sql_engine, sql_statement, jsonify_response)
@@ -109,14 +109,14 @@ class ClientQueries(Resource):
     @staticmethod
     def get_clients_filtered_by_rented_friends_number_and_date(sql_engine, friends_rented, start_date, end_date,
                                                                jsonify_response=True):
-        sql_statement = f"""select client.client_id, name, surname, mail, birth_date, address
+        sql_statement = f"""select client.client_id, p.name, p.surname, p.mail, p.birth_date, p.address
                                 from client
                                 left join profile p on client.profile_id = p.profile_id
                                 left join meeting m on client.client_id = m.client_id
                                 left join friend_group fg on m.friend_group_id = fg.friend_group_id
                                 left join friend_group_record fgr on fg.friend_group_id = fgr.friend_group_id
-                                where m.date between {start_date} and {end_date}
-                                group by client.client_id, name, surname, mail, birth_date, address
+                                where m.date between date '{start_date}' and date '{end_date}'
+                                group by client.client_id, p.name, p.surname, p.mail, p.birth_date, p.address
                                 having count(fgr.id)>={friends_rented};"""
         response = get_sql_response(sql_engine, sql_statement, jsonify_response)
         return response
