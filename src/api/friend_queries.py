@@ -150,12 +150,12 @@ class FriendQueries(Resource):
 
     @staticmethod
     def get_friends_filtered_by_rents(sql_engine, rents, start_date, end_date, jsonify_response=True):
-        sql_statement = f"""select friend.friend_id, name, surname, mail, birth_date, address from friend
+        sql_statement = f"""select friend.friend_id, p.name, p.surname, p.mail, p.birth_date, p.address from friend
                                 left join profile p on friend.profile_id = p.profile_id
                                 left join friend_group_record fgr on friend.friend_id = fgr.friend_id
                                 left join meeting m on fgr.friend_group_id = m.friend_group_id
-                                where m.date between {start_date} and {end_date}
-                                group by friend.friend_id, name, surname, mail, birth_date, address
+                                where m.date between date '{start_date}' and date '{end_date}'
+                                group by friend.friend_id, p.name, p.surname, p.mail, p.birth_date, p.address
                                 having count(friend.friend_id) >= {rents};"""
         response = get_sql_response(sql_engine, sql_statement, jsonify_response)
         return response
