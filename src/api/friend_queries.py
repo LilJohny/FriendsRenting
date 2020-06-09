@@ -140,8 +140,8 @@ class FriendQueries(Resource):
                                 inner join friend_group using(friend_group_id) 
                                 inner join friend_group_record using(friend_group_id) 
                                 inner join friend using(friend_id)
-                                where c.client_id = {client_id} and m.date between {start_date} and {end_date}
-                                group by friend.friend_id
+                                where c.client_id = {client_id} and m.date between date '{start_date}' and date '{end_date}'
+                                group by profile.name, profile.surname
                                 having count(friend.friend_id) >= {rents};"""
         response = get_sql_response(sql_engine, sql_statement, jsonify_response)
         return response

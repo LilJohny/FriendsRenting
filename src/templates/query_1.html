@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block title %}
-    <title>Dashboard - Taking a holiday</title>
+    <title>Dashboard - DataBase Query</title>
 {% endblock %}
 
 
@@ -38,17 +38,25 @@
             {% endif %}
         {% endwith %}
         <div class="card col-6 m-auto">
-            <div class="card-header">Taking a holiday:</div>
-            <form action="{{ url_for('take_a_holiday') }}" method="POST">
+            <div class="card-header">Hiring the Friends for the Fest:</div>
+            <form action="{{ url_for('query_1') }}" method="POST">
                 {{ form.hidden_tag() }}
                 <div class="mt-2">
                     <div class="row mt-2">
+                        <p class="col-6">Client Id(Client C):</p>
+                        {{ form.client_id(class_="col-6", placeholder="Client C Id") }}
+                    </div>
+                    <div class="row mt-2">
+                        <p class="col-6">Hires number:</p>
+                        {{ form.rents(class_="col-6", placeholder="Hires number date (N)") }}
+                    </div>
+                    <div class="row mt-2">
                         <p class="col-6">Start Date:</p>
-                        {{ form.start_date(class_="col-6", placeholder="First holiday day date") }}
+                        {{ form.start_date(class_="col-6", placeholder="Start date (F)") }}
                     </div>
                     <div class="row mt-2">
                         <p class="col-6">End Date:</p>
-                        {{ form.end_date(class_="col-6", placeholder="Last holiday day date") }}
+                        {{ form.end_date(class_="col-6", placeholder="End date (T)") }}
                     </div>
                 </div>
                 {{ form.submit(class_="btn btn-lg btn-block") }}
