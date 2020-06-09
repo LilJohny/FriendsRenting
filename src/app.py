@@ -10,7 +10,7 @@ login.login_view = 'login'
 api = Api(app)
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:docker@localhost:5432/friends_rent'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://team12:passwor2d1@142.93.163.88:6006/db12'
 
 # Secret key
 import os
