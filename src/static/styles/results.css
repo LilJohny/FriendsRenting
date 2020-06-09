@@ -1,0 +1,23 @@
+.query-result {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 50px;
+}
+
+.query-result-cell, .query-result-header {
+    border: 1px solid #262626;
+    padding: 8px;
+}
+
+.query-result-cell {
+    color: black;
+}
+
+.query-result tr:nth-child(even) {
+    background-color: #ffffff;
+}
+
+.query-result tr:hover {
+    background-color: #eaeaea;
+}

@@ -131,9 +131,9 @@ def query_6():
     form = Query6Form()
     if form.validate_on_submit():
         session = Session(bind=engine)
-        MeetingQueries.get_meetings_number_by_months(session, False)
+        data = MeetingQueries.get_meetings_number_by_months(session, False)
 
-        return render_template('success.html')
+        return render_template('query_results.html', data=data)
     return render_template('query_6.html', title='DataBase Query', form=form)
 
 
