@@ -215,3 +215,34 @@ def generate_holidays(session):
         holiday.end_date = end_date
         session.add(holiday)
     session.commit()
+
+
+def generate_users(session):
+    import random
+    from models.user import User
+    clients = list(range(1, 3001))
+    friends = list(range(1, 5001))
+    for i in range(1, 8001):
+        clients_or_friends = random.choice(['C', 'F'])
+
+        if clients_or_friends == 'C' and len(clients) == 0:
+
+            clients_or_friends = 'F'
+
+        elif clients_or_friends == 'F' and len(friends) == 0:
+
+            clients_or_friends = 'C'
+        user = User()
+        user.user_id = i
+        if clients_or_friends == 'C':
+            role_id = random.choice(clients)
+            user.client_id = role_id
+            clients.remove(role_id)
+
+        if clients_or_friends == 'F':
+            role_id = random.choice(friends)
+            user.friend_id = role_id
+            friends.remove(role_id)
+        session.add(user)
+
+    session.commit()
