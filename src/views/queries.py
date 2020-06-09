@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from api.client_queries import ClientQueries
 from api.friend_queries import FriendQueries
 from api.meeting_queries import MeetingQueries
+from api.present_queries import PresentQueries
 from app import app
 from forms.query_10_form import Query10Form
 from forms.query_11_form import Query11Form
@@ -154,6 +155,16 @@ def query_7():
 @login_required
 def query_8():
     form = Query8Form()
+    if form.validate_on_submit():
+        client_id = form.client_id.data
+        if not check_client_id_valid(client_id) or not form.validate():
+            flash("Wrong Client Id", category="error")
+            return redirect(url_for('query_8'))
+        start_date = form.start_date.data
+        end_date = form.end_date.data
+        PresentQueries.get_present_sorted_by_average_holidays(engine, client_id, start_date, end_date, False)
+
+        return render_template('success.html')
     return render_template('query_8.html', title='DataBase Query', form=form)
 
 
