@@ -3,7 +3,10 @@ from flask_login import LoginManager
 from flask_restful import Api
 
 app = Flask(__name__)
+
 login = LoginManager(app)
+login.login_view = 'login'
+
 api = Api(app)
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
