@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 
 from api.client_queries import ClientQueries
 from api.friend_queries import FriendQueries
+from api.meeting_queries import MeetingQueries
 from app import app
 from forms.query_10_form import Query10Form
 from forms.query_11_form import Query11Form
@@ -115,6 +116,8 @@ def query_5():
         end_date = form.end_date.data
         times_hired = form.times_hired.data
         FriendQueries.get_all_friends_by_rents_and_date(engine, start_date, end_date, times_hired, False)
+
+        return render_template('success.html')
     return render_template('query_5.html', title='DataBase Query', form=form)
 
 
@@ -122,6 +125,11 @@ def query_5():
 @login_required
 def query_6():
     form = Query6Form()
+    if form.validate_on_submit():
+        session = Session(bind=engine)
+        MeetingQueries.get_meetings_number_by_months(session, False)
+
+        return render_template('success.html')
     return render_template('query_6.html', title='DataBase Query', form=form)
 
 
@@ -129,6 +137,16 @@ def query_6():
 @login_required
 def query_7():
     form = Query7Form()
+    if form.validate_on_submit():
+        friend_id = form.friend_id.data
+        if not check_friend_id_valid(friend_id) or not form.validate():
+            flash("Wrong Friend Id", category="error")
+            return redirect(url_for('query_7'))
+        start_date = form.start_date.data
+        end_date = form.end_date.data
+        least_friends = form.least_friends.data
+        FriendQueries.get_how_many_times_rented(engine, least_friends, start_date, end_date)
+        return render_template('success.html')
     return render_template('query_7.html', title='DataBase Query', form=form)
 
 

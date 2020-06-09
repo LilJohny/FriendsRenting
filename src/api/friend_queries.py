@@ -177,3 +177,9 @@ class FriendQueries(Resource):
 
         response = get_sql_response(sql_engine, sql_statement, jsonify_response)
         return response
+
+    @staticmethod
+    def get_how_many_times_rented(sql_engine, least_friends, start_date, end_date,
+                                  jsonify_response=True):
+        # TODO IMPLEMENT
+        return []
