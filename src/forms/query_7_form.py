@@ -5,7 +5,7 @@ from wtforms.validators import DataRequired
 
 class Query7Form(FlaskForm):
     friend_id = IntegerField('Friend id', validators=[DataRequired()])
-    rents = IntegerField('Rents', validators=[DataRequired()])
+    least_friends = IntegerField('Least friends', validators=[DataRequired()])
     start_date = DateField('Start date', validators=[DataRequired()])
     end_date = DateField('Start date', validators=[DataRequired()])
     submit = SubmitField('Submit')
@@ -17,5 +17,5 @@ class Query7Form(FlaskForm):
         return difference > 0
 
     def validate_on_submit(self):
-        return True if self.friend_id.data is not None and self.rents.data is not None \
+        return True if self.friend_id.data is not None and self.least_friends.data is not None \
                        and self.start_date.data is not None and self.end_date.data is not None else False
