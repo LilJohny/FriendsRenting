@@ -3,8 +3,9 @@ from wtforms import IntegerField, SubmitField
 from wtforms.validators import DataRequired
 
 
-class PresentForm(FlaskForm):
+class ReturnPresentForm(FlaskForm):
     present_id = IntegerField('Present id', validators=[DataRequired()])
+    friend_id = IntegerField('Friend id', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
     def validate_on_submit(self):
