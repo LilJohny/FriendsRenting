@@ -1,6 +1,5 @@
 from flask import render_template, flash, redirect, url_for
 from flask_login import login_required
-from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from api.client_queries import ClientQueries
@@ -49,8 +48,10 @@ def query_1():
             flash("Wrong Client Id", category="error")
             return redirect(url_for('query_1'))
 
-        FriendQueries.get_rented_friends_by_client_rents_and_date(engine, client_id, start_date, end_date, rents, False)
-        return render_template('success.html')
+        data = FriendQueries.get_rented_friends_by_client_rents_and_date(engine, client_id, start_date, end_date, rents,
+                                                                         False)
+        data = [["name", "surname", "friend_id", "client_id"]] + data
+        return render_template('query_results.html', data=data)
     return render_template('query_1.html', title='DataBase Query', form=form)
 
 
@@ -78,9 +79,10 @@ def query_2():
         start_date = form.start_date.data
         end_date = form.end_date.data
         rents = form.rents.data
-        ClientQueries.get_clients_who_rented_by_date_rents_and_number(engine, friend_id, start_date,
-                                                                      end_date, rents, False)
-        return render_template('success.html')
+        data = ClientQueries.get_clients_who_rented_by_date_rents_and_number(engine, friend_id, start_date,
+                                                                             end_date, rents, False)
+        data = [["name", "surname"]] + data
+        return render_template('query_results.html', data=data)
     return render_template('query_2.html', title='DataBase Query', form=form)
 
 
@@ -92,8 +94,9 @@ def query_3():
         start_date = form.start_date.data
         end_date = form.end_date.data
         rents = form.rents.data
-        FriendQueries.get_friends_filtered_by_rents(engine, rents, start_date, end_date, False)
-        return render_template('success.html')
+        data = FriendQueries.get_friends_filtered_by_rents(engine, rents, start_date, end_date, False)
+        data = [["friend_id", "name", "surname", "mail", "birth_date", "address"]] + data
+        return render_template('query_results.html', data=data)
     return render_template('query_3.html', title='DataBase Query', form=form)
 
 
@@ -105,9 +108,11 @@ def query_4():
         start_date = form.start_date.data
         end_date = form.end_date.data
         least_friend = form.least_friend.data
-        ClientQueries.get_clients_filtered_by_rented_friends_number_and_date(engine, least_friend, start_date, end_date,
-                                                                             False)
-        return render_template('success.html')
+        data = ClientQueries.get_clients_filtered_by_rented_friends_number_and_date(engine, least_friend, start_date,
+                                                                                    end_date,
+                                                                                    False)
+        data = [["client_id", "name", "surname", "mail", "birth_date", "address"]] + data
+        return render_template('query_results.html', data=data)
     return render_template('query_4.html', title='DataBase Query', form=form)
 
 
@@ -119,9 +124,9 @@ def query_5():
         start_date = form.start_date.data
         end_date = form.end_date.data
         times_hired = form.times_hired.data
-        FriendQueries.get_all_friends_by_rents_and_date(engine, start_date, end_date, times_hired, False)
-
-        return render_template('success.html')
+        data = FriendQueries.get_all_friends_by_rents_and_date(engine, start_date, end_date, times_hired, False)
+        data = [["name", "surname"]] + data
+        return render_template('query_results.html', data=data)
     return render_template('query_5.html', title='DataBase Query', form=form)
 
 
@@ -132,7 +137,7 @@ def query_6():
     if form.validate_on_submit():
         session = Session(bind=engine)
         data = MeetingQueries.get_meetings_number_by_months(session, False)
-
+        data = [["meetings number", "month"]] + data
         return render_template('query_results.html', data=data)
     return render_template('query_6.html', title='DataBase Query', form=form)
 
@@ -149,8 +154,9 @@ def query_7():
         start_date = form.start_date.data
         end_date = form.end_date.data
         least_friends = form.least_friends.data
-        FriendQueries.get_how_many_times_rented(engine, friend_id, least_friends, start_date, end_date)
-        return render_template('success.html')
+        data = FriendQueries.get_how_many_times_rented(engine, friend_id, least_friends, start_date, end_date, False)
+        data = [["times_hired", "friend_id", "name", "surname"]] + data
+        return render_template('query_results.html', data=data)
     return render_template('query_7.html', title='DataBase Query', form=form)
 
 
@@ -165,9 +171,9 @@ def query_8():
             return redirect(url_for('query_8'))
         start_date = form.start_date.data
         end_date = form.end_date.data
-        PresentQueries.get_present_sorted_by_average_holidays(engine, client_id, start_date, end_date, False)
-
-        return render_template('success.html')
+        data = PresentQueries.get_present_sorted_by_average_holidays(engine, client_id, start_date, end_date, False)
+        data = [["avg.holiday", "present_id", "title", "from_id", "to_id", "date", "returned"]] + data
+        return render_template('query_results.html', data=data)
     return render_template('query_8.html', title='DataBase Query', form=form)
 
 
@@ -179,9 +185,10 @@ def query_9():
         start_date = form.start_date.data
         end_date = form.end_date.data
         least_clients = form.least_clients.data
-        FriendQueries.get_all_friends_sorted_by_complaint_number(engine, least_clients, start_date, end_date, False)
-
-        return render_template('success.html')
+        data = FriendQueries.get_all_friends_sorted_by_complaint_number(engine, least_clients, start_date, end_date,
+                                                                        False)
+        data = [["complaints", "friend_id", "name", "surname"]] + data
+        return render_template('query_results.html', data=data)
     return render_template('query_9.html', title='DataBase Query', form=form)
 
 
@@ -197,10 +204,10 @@ def query_10():
             return redirect(url_for('query_10'))
         start_date = form.start_date.data
         end_date = form.end_date.data
-        MeetingQueries.get_common_meeting_for_friend_and_client_by_date(engine, friend_id, client_id, start_date,
-                                                                        end_date, False)
-
-        return render_template('success.html')
+        data = MeetingQueries.get_common_meeting_for_friend_and_client_by_date(engine, friend_id, client_id, start_date,
+                                                                               end_date, False)
+        data = [["name", "surname", "meeting id"]] + data
+        return render_template('query_results.html', data=data)
     return render_template('query_10.html', title='DataBase Query', form=form)
 
 
@@ -215,10 +222,11 @@ def query_11():
         start_date = session.query(Holiday.start_date).order_by(Holiday.start_date).all()[0][0]
         end_date = session.query(Holiday.end_date).order_by(Holiday.end_date).all()
         end_date = end_date[len(end_date) - 1][0]
-        HolidayQueries.get_day_when_friends_had_holidays(engine, min_friends_absent, max_friends_absent, start_date,
-                                                         end_date, False)
-
-        return render_template('success.html')
+        data = HolidayQueries.get_day_when_friends_had_holidays(engine, min_friends_absent, max_friends_absent,
+                                                                start_date,
+                                                                end_date, False)
+        data = [["day", "friends on holiday"]] + data
+        return render_template('query_results.html', data=data)
     return render_template('query_11.html', title='DataBase Query', form=form)
 
 
@@ -232,7 +240,7 @@ def query_12():
             flash("Wrong  Friend Id", category="error")
             return redirect(url_for('query_8'))
         session = Session(bind=engine)
-        FriendQueries.get_average_complained_clients_in_group_by_months(session, friend_id, False)
-
-        return render_template('success.html')
+        data = FriendQueries.get_average_complained_clients_in_group_by_months(session, friend_id, False)
+        data = [["avg. complained clients", "month"]] + data
+        return render_template('query_results.html', data=data)
     return render_template('query_12.html', title='DataBase Query', form=form)

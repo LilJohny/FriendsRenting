@@ -28,7 +28,7 @@ class HolidayQueries(Resource):
                                 left join holiday h on h.start_date <= day and h.end_date >= day
                                 left join friend f on h.friend_id = f.friend_id
                                 group by day
-                                having count(*) > {min_friends_absent}
-                                and count(*) < {max_friends_absent};"""
+                                having count(*) >= {min_friends_absent}
+                                and count(*) <= {max_friends_absent};"""
         response = get_sql_response(sql_engine, sql_statement, jsonify_response)
         return response

@@ -134,7 +134,7 @@ class FriendQueries(Resource):
     @staticmethod
     def get_rented_friends_by_client_rents_and_date(sql_engine, client_id, start_date, end_date,
                                                     rents, jsonify_response=True):
-        sql_statement = f"""select profile.name, profile.surname, friend.friend_id, client_id, 
+        sql_statement = f"""select profile.name, profile.surname, friend.friend_id, client_id 
                             from client c
                             inner join meeting m using (client_id)
                             inner join friend_group using (friend_group_id)

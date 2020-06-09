@@ -68,13 +68,13 @@ class MeetingQueries(Resource):
     @staticmethod
     def get_common_meeting_for_friend_and_client_by_date(sql_engine, friend_id, client_id, start_date, end_date,
                                                          jsonify_response):
-        sql_statement = f"""select p.name, p.name, m.meeting_id from client c 
+        sql_statement = f"""select p.name, p.surname, m.meeting_id from client c 
                                 inner join meeting m using(client_id)
                                 inner join friend_group using(friend_group_id) 
                                 inner join friend_group_record using(friend_group_id) 
                                 inner join friend using(friend_id)
                                 left join profile p on friend.profile_id = p.profile_id
                                 where friend.friend_id = {friend_id} and c.client_id = {client_id} and m.date between date '{start_date}' and date  '{end_date}'
-                                group by friend.friend_id,p.name, p.name, m.meeting_id;"""
+                                group by friend.friend_id,p.name, p.surname, m.meeting_id;"""
         response = get_sql_response(sql_engine, sql_statement, jsonify_response)
         return response
