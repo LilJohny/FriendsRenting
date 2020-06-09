@@ -6,6 +6,8 @@ from werkzeug.utils import redirect
 from app import login, app
 from forms.login_form import LoginForm
 from models import engine
+from models.client import Client
+from models.friend import Friend
 from models.profile import Profile
 from models.user import User
 
@@ -23,12 +25,17 @@ def login():
     form.validate()
     if form.validate_on_submit():
         session = Session(bind=engine)
-        user = session.query(User, Profile).select_from(User).join(Profile).filter(
-            Profile.mail == form.mail.data).filter(User.check_password(Profile.password, form.password.data)).first()
+        client = session.query(User, Client, Profile).select_from(User).join(Client).join(Profile).filter(
+            Profile.mail == form.mail.data). \
+            filter(User.check_password(Profile.password, form.password.data)).first()
+        friend = session.query(User, Friend, Profile).select_from(User).join(Friend).join(Profile). \
+            filter(Profile.mail == form.mail.data). \
+            filter(User.check_password(Profile.password, form.password.data)).first()
 
-        if user is None:
+        if friend is None and client is None:
             flash('Invalid username or password')
             return redirect(url_for('login'))
+        user = friend if friend is not None else client
         login_user(user.User, remember=form.remember_me.data)
         return redirect(url_for('index'))
     return render_template('login.html', title='Sign In', form=form)
