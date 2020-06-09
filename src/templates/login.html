@@ -15,7 +15,6 @@
             <p class="mt-5 mb-3 text-muted">Please, provide login information:</p>
             {{ form.mail(class_="form-control", placeholder="Your mail",autofocus=True) }}
             {{ form.password(id_="inputPassword",class_="form-control", placeholder="Password") }}
-            <p class="mb-3 text-muted">Remember me:&nbsp;&nbsp;&nbsp;{{ form.remember_me() }}</p>
             <div class="mb-3"></div>
             {{ form.submit(class_="btn btn-lg btn-block") }}
         </form>

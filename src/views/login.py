@@ -36,7 +36,7 @@ def login():
             flash('Invalid username or password')
             return redirect(url_for('login'))
         user = friend if friend is not None else client
-        login_user(user.User, remember=form.remember_me.data)
+        login_user(user.User, remember=True)
         return redirect(url_for('index'))
     return render_template('login.html', title='Sign In', form=form)
 
