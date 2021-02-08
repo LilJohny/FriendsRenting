@@ -1,6 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import SubmitField, IntegerField, DateField
-from wtforms.validators import DataRequired
+from wtforms import SubmitField
 
 
 class Query6Form(FlaskForm):

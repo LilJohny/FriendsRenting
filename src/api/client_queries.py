@@ -4,18 +4,18 @@ from flask import request
 from flask_restful import Resource
 from sqlalchemy.orm import Session
 
-from api.utils import get_sql_response
-from models import engine
-from models.client import Client
-from models.client_group import ClientGroup
-from models.client_group_record import ClientGroupRecord
-from models.complaint import Complaint
-from models.friend import Friend
-from models.friend_group import FriendGroup
-from models.friend_group_record import FriendGroupRecord
-from models.meeting import Meeting
-from models.profile import Profile
-from models.serializer import AlchemyEncoder
+from .utils import get_sql_response
+from ..models import engine
+from ..models.client import Client
+from ..models.client_group import ClientGroup
+from ..models.client_group_record import ClientGroupRecord
+from ..models.complaint import Complaint
+from ..models.friend import Friend
+from ..models.friend_group import FriendGroup
+from ..models.friend_group_record import FriendGroupRecord
+from ..models.meeting import Meeting
+from ..models.profile import Profile
+from ..models.serializer import AlchemyEncoder
 
 
 class ClientQueries(Resource):

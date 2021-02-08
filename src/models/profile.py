@@ -1,4 +1,4 @@
-from models import db
+from . import db
 
 
 class Profile(db.Model):
@@ -13,4 +13,4 @@ class Profile(db.Model):
     password = db.Column(db.String(30), unique=False, nullable=False)
 
     def __repr__(self):
-        return '<Profile %r>' % ' '.join([self.name, self.surname])
+        return f'<Profile {" ".join([self.name, self.surname])!r}>'

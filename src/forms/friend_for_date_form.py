@@ -8,4 +8,4 @@ class HireFriendForMeetingForm(FlaskForm):
     submit = SubmitField('Submit')
 
     def validate_on_submit(self):
-        return True if self.friend_id.data is not None  else False
+        return True if self.friend_id.data is not None else False

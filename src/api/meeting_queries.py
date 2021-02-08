@@ -5,13 +5,13 @@ from flask import request
 from flask_restful import Resource
 from sqlalchemy.orm import Session
 
-from api.utils import get_sql_response
-from models import engine
-from models.friend import Friend
-from models.friend_group import FriendGroup
-from models.friend_group_record import FriendGroupRecord
-from models.meeting import Meeting
-from models.serializer import AlchemyEncoder
+from .utils import get_sql_response
+from ..models import engine
+from ..models.friend import Friend
+from ..models.friend_group import FriendGroup
+from ..models.friend_group_record import FriendGroupRecord
+from ..models.meeting import Meeting
+from ..models.serializer import AlchemyEncoder
 
 
 class MeetingQueries(Resource):

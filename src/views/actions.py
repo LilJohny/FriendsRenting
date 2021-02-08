@@ -1,7 +1,7 @@
 from flask import render_template
 from flask_login import login_required, current_user
 
-from app import app
+from ..app import app
 
 
 @app.route('/actions')

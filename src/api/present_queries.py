@@ -2,10 +2,10 @@ from flask import request
 from flask_restful import Resource
 from sqlalchemy.orm import Session
 
-from api.utils import jsonify, get_sql_response
-from models import engine
-from models.friend import Friend
-from models.present import Present
+from .utils import jsonify, get_sql_response
+from ..models import engine
+from ..models.friend import Friend
+from ..models.present import Present
 
 
 class PresentQueries(Resource):

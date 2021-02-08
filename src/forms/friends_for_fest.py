@@ -8,4 +8,4 @@ class HireFriendsForFestForm(FlaskForm):
     submit = SubmitField('Submit')
 
     def validate_on_submit(self):
-        return True if self.friends_id.data is not None  else False
+        return True if self.friends_id.data is not None else False

@@ -1,4 +1,4 @@
-from models import db
+from . import db
 
 
 class Present(db.Model):
@@ -10,4 +10,4 @@ class Present(db.Model):
     returned = db.Column(db.Boolean, default=False, unique=False, nullable=False)
 
     def __repr__(self):
-        return '<Present %r>' % self.title
+        return f'<Present {self.title!r}>'

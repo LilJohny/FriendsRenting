@@ -2,9 +2,9 @@ from flask import request
 from flask_restful import Resource
 from sqlalchemy.orm import Session
 
-from api.utils import get_sql_response
-from models import engine
-from models.holiday import Holiday
+from .utils import get_sql_response
+from ..models import engine
+from ..models.holiday import Holiday
 
 
 class HolidayQueries(Resource):

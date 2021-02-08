@@ -1,4 +1,4 @@
-from models import db
+from . import db
 
 
 class Holiday(db.Model):
@@ -8,4 +8,4 @@ class Holiday(db.Model):
     friend_id = db.Column(db.Integer, db.ForeignKey('friend.friend_id', ondelete='CASCADE'), unique=False, nullable=False)
 
     def __repr__(self):
-        return '<Holiday of %r>' % self.friend_id
+        return f'<Holiday of {self.friend_id!r}>'
