@@ -2,28 +2,28 @@ from flask import render_template, flash, redirect, url_for
 from flask_login import login_required
 from sqlalchemy.orm import Session
 
-from api.client_queries import ClientQueries
-from api.friend_queries import FriendQueries
-from api.holiday_queries import HolidayQueries
-from api.meeting_queries import MeetingQueries
-from api.present_queries import PresentQueries
-from app import app
-from forms.query_10_form import Query10Form
-from forms.query_11_form import Query11Form
-from forms.query_12_form import Query12Form
-from forms.query_1_form import Query1Form
-from forms.query_2_form import Query2Form
-from forms.query_3_form import Query3Form
-from forms.query_4_form import Query4Form
-from forms.query_5_form import Query5Form
-from forms.query_6_form import Query6Form
-from forms.query_7_form import Query7Form
-from forms.query_8_form import Query8Form
-from forms.query_9_form import Query9Form
-from models import engine
-from models.client import Client
-from models.friend import Friend
-from models.holiday import Holiday
+from src.api.client_queries import ClientQueries
+from src.api.friend_queries import FriendQueries
+from src.api.holiday_queries import HolidayQueries
+from src.api.meeting_queries import MeetingQueries
+from src.api.present_queries import PresentQueries
+from src.app import app
+from src.forms.query_10_form import Query10Form
+from src.forms.query_11_form import Query11Form
+from src.forms.query_12_form import Query12Form
+from src.forms.query_1_form import Query1Form
+from src.forms.query_2_form import Query2Form
+from src.forms.query_3_form import Query3Form
+from src.forms.query_4_form import Query4Form
+from src.forms.query_5_form import Query5Form
+from src.forms.query_6_form import Query6Form
+from src.forms.query_7_form import Query7Form
+from src.forms.query_8_form import Query8Form
+from src.forms.query_9_form import Query9Form
+from src.models import engine
+from src.models.client import Client
+from src.models.friend import Friend
+from src.models.holiday import Holiday
 
 
 @app.route('/queries')

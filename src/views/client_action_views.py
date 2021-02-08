@@ -2,20 +2,20 @@ from flask import flash, redirect, url_for, render_template
 from flask_login import login_required, current_user
 from sqlalchemy.orm import Session
 import datetime
-from ..app import app
-from ..forms.complaint_form import ComplaintForm
-from ..forms.friend_for_date_form import HireFriendForMeetingForm
-from ..forms.friends_for_fest import HireFriendsForFestForm
-from ..forms.give_present_form import GivePresentForm
-from ..models import engine
-from ..models.client_group import ClientGroup
-from ..models.client_group_record import ClientGroupRecord
-from ..models.complaint import Complaint
-from ..models.friend import Friend
-from ..models.friend_group import FriendGroup
-from ..models.friend_group_record import FriendGroupRecord
-from ..models.meeting import Meeting
-from ..models.present import Present
+from src.app import app
+from src.forms.complaint_form import ComplaintForm
+from src.forms.friend_for_date_form import HireFriendForMeetingForm
+from src.forms.friends_for_fest import HireFriendsForFestForm
+from src.forms.give_present_form import GivePresentForm
+from src.models import engine
+from src.models.client_group import ClientGroup
+from src.models.client_group_record import ClientGroupRecord
+from src.models.complaint import Complaint
+from src.models.friend import Friend
+from src.models.friend_group import FriendGroup
+from src.models.friend_group_record import FriendGroupRecord
+from src.models.meeting import Meeting
+from src.models.present import Present
 
 
 @app.route('/giving_a_present', methods=['POST', 'GET'])

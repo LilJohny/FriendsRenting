@@ -6,12 +6,12 @@ from flask_restful import Resource
 from sqlalchemy.orm import Session
 
 from .utils import get_sql_response
-from ..models import engine
-from ..models.friend import Friend
-from ..models.friend_group import FriendGroup
-from ..models.friend_group_record import FriendGroupRecord
-from ..models.meeting import Meeting
-from ..models.serializer import AlchemyEncoder
+from src.models import engine
+from src.models.friend import Friend
+from src.models.friend_group import FriendGroup
+from src.models.friend_group_record import FriendGroupRecord
+from src.models.meeting import Meeting
+from src.models.serializer import AlchemyEncoder
 
 
 class MeetingQueries(Resource):

@@ -4,7 +4,7 @@ import random
 
 from sqlalchemy import text
 
-from ..models.serializer import AlchemyEncoder
+from src.models.serializer import AlchemyEncoder
 
 
 def execute_sql_statement(sql_engine, sql_statement):

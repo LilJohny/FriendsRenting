@@ -3,9 +3,9 @@ from flask_restful import Resource
 from sqlalchemy.orm import Session
 
 from .utils import jsonify, get_sql_response
-from ..models import engine
-from ..models.friend import Friend
-from ..models.present import Present
+from src.models import engine
+from src.models.friend import Friend
+from src.models.present import Present
 
 
 class PresentQueries(Resource):

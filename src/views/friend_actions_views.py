@@ -2,12 +2,12 @@ from flask import render_template, flash, redirect, url_for
 from flask_login import login_required, current_user
 from sqlalchemy.orm import Session
 
-from app import app
-from forms.holiday_form import HolidayForm
-from forms.return_present_form import ReturnPresentForm
-from models import engine
-from models.holiday import Holiday
-from models.present import Present
+from src.app import app
+from src.forms.holiday_form import HolidayForm
+from src.forms.return_present_form import ReturnPresentForm
+from src.models import engine
+from src.models.holiday import Holiday
+from src.models.present import Present
 
 
 @app.route('/take_a_holiday', methods=['GET', 'POST'])

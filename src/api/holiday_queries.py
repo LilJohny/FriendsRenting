@@ -3,8 +3,8 @@ from flask_restful import Resource
 from sqlalchemy.orm import Session
 
 from .utils import get_sql_response
-from ..models import engine
-from ..models.holiday import Holiday
+from src.models import engine
+from src.models.holiday import Holiday
 
 
 class HolidayQueries(Resource):
