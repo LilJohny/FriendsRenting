@@ -1,13 +1,13 @@
 from flask import render_template, flash, redirect, url_for
 from flask_login import login_required
 from sqlalchemy.orm import Session
+from flask import current_app as app
 
 from src.api.client_queries import ClientQueries
 from src.api.friend_queries import FriendQueries
 from src.api.holiday_queries import HolidayQueries
 from src.api.meeting_queries import MeetingQueries
 from src.api.present_queries import PresentQueries
-from src.app import app
 from src.forms.query_10_form import Query10Form
 from src.forms.query_11_form import Query11Form
 from src.forms.query_12_form import Query12Form

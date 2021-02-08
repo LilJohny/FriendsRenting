@@ -1,8 +1,8 @@
 from flask import render_template, flash, redirect, url_for
 from flask_login import login_required, current_user
 from sqlalchemy.orm import Session
+from flask import current_app as app
 
-from src.app import app
 from src.forms.holiday_form import HolidayForm
 from src.forms.return_present_form import ReturnPresentForm
 from src.models import engine

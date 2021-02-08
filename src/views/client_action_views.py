@@ -2,7 +2,7 @@ from flask import flash, redirect, url_for, render_template
 from flask_login import login_required, current_user
 from sqlalchemy.orm import Session
 import datetime
-from src.app import app
+from flask import current_app as app
 from src.forms.complaint_form import ComplaintForm
 from src.forms.friend_for_date_form import HireFriendForMeetingForm
 from src.forms.friends_for_fest import HireFriendsForFestForm

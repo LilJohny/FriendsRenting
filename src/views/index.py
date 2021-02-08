@@ -1,6 +1,5 @@
 from flask import render_template
-
-from app import app
+from flask import current_app as app
 
 
 @app.route('/index', methods=['GET', 'POST'])

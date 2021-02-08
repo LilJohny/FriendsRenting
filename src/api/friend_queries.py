@@ -8,18 +8,18 @@ from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from .utils import get_sql_response, jsonify
-from src.models import engine
-from src.models.client import Client
-from src.models.client_group import ClientGroup
-from src.models.client_group_record import ClientGroupRecord
-from src.models.complaint import Complaint
-from src.models.friend import Friend
-from src.models.friend_group import FriendGroup
-from src.models.friend_group_record import FriendGroupRecord
-from src.models.holiday import Holiday
-from src.models.meeting import Meeting
-from src.models.profile import Profile
-from src.models.serializer import AlchemyEncoder
+from models import engine
+from models.client import Client
+from models.client_group import ClientGroup
+from models.client_group_record import ClientGroupRecord
+from models.complaint import Complaint
+from models.friend import Friend
+from models.friend_group import FriendGroup
+from models.friend_group_record import FriendGroupRecord
+from models.holiday import Holiday
+from models.meeting import Meeting
+from models.profile import Profile
+from models.serializer import AlchemyEncoder
 
 
 class FriendQueries(Resource):

@@ -18,14 +18,14 @@ import os
 SECRET_KEY = os.urandom(32)
 app.config['SECRET_KEY'] = SECRET_KEY
 # Views
-import views.profile
-import views.login
-import views.dashboard
-import views.queries
-import views.actions
-import views.index
-import views.friend_actions_views
-import views.client_action_views
+# import views.profile
+# import views.login
+# import views.dashboard
+# import views.queries
+# import views.actions
+# import views.index
+# import views.friend_actions_views
+# import views.client_action_views
 
 # API setup
 from api.hello_world import HelloWorld
